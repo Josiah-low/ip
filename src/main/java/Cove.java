@@ -15,12 +15,12 @@ public class Cove {
 
                 switch (command) {
                     case "bye":
-                        if (!userInput.equals("bye")) throw new CoveException("'bye' command does not accept any parameters.");
+                        if (!userInput.trim().equals("bye")) throw new CoveException("'bye' command does not accept any parameters.");
                         printExit();
                         return;
 
                     case "list":
-                        if (!userInput.equals("list")) throw new CoveException("'list' command does not accept any parameters.");
+                        if (!userInput.trim().equals("list")) throw new CoveException("'list' command does not accept any parameters.");
                         printTaskList();
                         break;
 
@@ -35,7 +35,7 @@ public class Cove {
                     }
 
                     case "todo": {
-                        handleToDo();
+                        handleToDo(userInput);
                         break;
                     }
 
@@ -62,6 +62,7 @@ public class Cove {
                     default: {
                         System.out.println("Unknown input");
                         printLongLine();
+                        System.out.println();
                         break;
                     }
                 }
@@ -161,8 +162,11 @@ public class Cove {
         unmarkTaskAsDone(taskIndex);
     }
 
-    public static void handleToDo(String userInput) {
-        String description = userInput.split("todo ")[1];
+    public static void handleToDo(String userInput) throws CoveException {
+        String description = userInput.split("todo ", 2)[1];
+        if (description.replaceAll("\\s+","").isEmpty()) {
+            throw new CoveException("OOPS! The description of a todo cannot be empty.");
+        }
         tasks[Task.getNumOfTasks()] = new ToDo(description);
         printTaskAdded();
     }
