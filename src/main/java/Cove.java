@@ -12,25 +12,42 @@ public class Cove {
         while(true) {
             String userInput = scanner.nextLine();
             printLongLine();
+            String command = userInput.split(" ")[0];
             if (Objects.equals(userInput, "bye")) {
                 break;
             } else if (Objects.equals(userInput, "list")) {
                 printTaskList();
-            } else if (userInput.startsWith("mark ")) {
+            } else if (Objects.equals(command, "mark")) {
                 String[] words = userInput.split(" ");
                 int taskIndex = Integer.parseInt(words[1]);
                 markTaskAsDone(taskIndex);
-            } else if (userInput.startsWith("unmark ")) {
+            } else if (Objects.equals(command, "unmark")) {
                 String[] words = userInput.split(" ");
                 int taskIndex = Integer.parseInt(words[1]);
                 unmarkTaskAsDone(taskIndex);
-            }else {
-                System.out.println(" added: " + userInput);
-                tasks[Task.getNumOfTasks()] = new Task(userInput);
+            } else {
+                // Add task
+                System.out.println(" Got it. I've added this task:");
+                if (Objects.equals(command, "todo")) {
+                    String description = userInput.split("todo ")[1];
+                    tasks[Task.getNumOfTasks()] = new ToDo(description);
+                } else if (Objects.equals(command, "deadline")) {
+                    String[] words = userInput.split(" /by ");
+                    String description = words[0].split(" ")[1];
+                    String by = words[1];
+                    tasks[Task.getNumOfTasks()] = new Deadline(description, by);
+                } else if (Objects.equals(command, "event")) {
+                    String description = userInput.split("event ")[1];
+                    description = description.split("/from ")[0];
+                    String start = userInput.split("/from ")[1];
+                    start = start.split("/to")[0];
+                    String end = userInput.split("/to ")[1];
+                    tasks[Task.getNumOfTasks()] = new Event(description, start, end);
+                }
+                System.out.println(" " + tasks[Task.getNumOfTasks() - 1].toString());
                 printLongLine();
             }
         }
-
         printExit();
     }
 
