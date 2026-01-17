@@ -32,9 +32,9 @@ public class Cove {
                     String description = userInput.split("todo ")[1];
                     tasks[Task.getNumOfTasks()] = new ToDo(description);
                 } else if (Objects.equals(command, "deadline")) {
-                    String[] words = userInput.split(" /by ");
-                    String description = words[0].split(" ")[1];
-                    String by = words[1];
+                    String description = userInput.split("deadline ")[1];
+                    description = description.split(" /by ")[0];
+                    String by = userInput.split(" /by ")[1];
                     tasks[Task.getNumOfTasks()] = new Deadline(description, by.stripTrailing());
                 } else if (Objects.equals(command, "event")) {
                     String description = userInput.split("event ")[1];
