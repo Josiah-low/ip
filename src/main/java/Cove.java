@@ -8,70 +8,75 @@ public class Cove {
         printGreeting();
 
         while(true) {
-            String userInput = scanner.nextLine();
-            printLongLine();
-            String command = userInput.split(" ")[0];
+            try {
+                String userInput = scanner.nextLine();
+                printLongLine();
+                String command = userInput.split(" ")[0];
 
-            switch (command) {
-                case "bye":
-                    printExit();
-                    return;
+                switch (command) {
+                    case "bye":
+                        if (!userInput.equals("bye")) throw new CoveException("'bye' command does not accept any parameters");
+                        printExit();
+                        return;
 
-                case "list":
-                    printTaskList();
-                    break;
+                    case "list":
+                        if (!userInput.equals("list")) throw new CoveException("'list' command does not accept any parameters");
+                        printTaskList();
+                        break;
 
-                case "mark": {
-                    String[] words = userInput.split(" ");
-                    int taskIndex = Integer.parseInt(words[1]);
-                    markTaskAsDone(taskIndex);
-                    break;
+                    case "mark": {
+                        String[] words = userInput.split(" ");
+                        int taskIndex = Integer.parseInt(words[1]);
+                        markTaskAsDone(taskIndex);
+                        break;
+                    }
+
+                    case "unmark": {
+                        String[] words = userInput.split(" ");
+                        int taskIndex = Integer.parseInt(words[1]);
+                        unmarkTaskAsDone(taskIndex);
+                        break;
+                    }
+
+                    case "todo": {
+                        String description = userInput.split("todo ")[1];
+                        tasks[Task.getNumOfTasks()] = new ToDo(description);
+                        printTaskAdded();
+                        break;
+                    }
+
+                    case "deadline": {
+                        String description = userInput.split("deadline ")[1];
+                        description = description.split(" /by ")[0];
+                        String by = userInput.split(" /by ")[1];
+                        tasks[Task.getNumOfTasks()] = new Deadline(description, by.stripTrailing());
+                        printTaskAdded();
+                        break;
+                    }
+
+                    case "event": {
+                        String description = userInput.split("event ")[1];
+                        description = description.split(" /from ")[0];
+                        String start = userInput.split(" /from ")[1];
+                        start = start.split(" /to ")[0];
+                        String end = userInput.split(" /to ")[1];
+                        tasks[Task.getNumOfTasks()] = new Event(description, start, end.stripTrailing());
+                        printTaskAdded();
+                        break;
+                    }
+
+                    default: {
+                        System.out.println("Unknown input");
+                        printLongLine();
+                        break;
+                    }
                 }
-
-                case "unmark": {
-                    String[] words = userInput.split(" ");
-                    int taskIndex = Integer.parseInt(words[1]);
-                    unmarkTaskAsDone(taskIndex);
-                    break;
-                }
-
-                case "todo": {
-                    String description = userInput.split("todo ")[1];
-                    tasks[Task.getNumOfTasks()] = new ToDo(description);
-                    printTaskAdded();
-                    break;
-                }
-
-                case "deadline": {
-                    String description = userInput.split("deadline ")[1];
-                    description = description.split(" /by ")[0];
-                    String by = userInput.split(" /by ")[1];
-                    tasks[Task.getNumOfTasks()] = new Deadline(description, by.stripTrailing());
-                    printTaskAdded();
-                    break;
-                }
-
-                case "event": {
-                    String description = userInput.split("event ")[1];
-                    description = description.split(" /from ")[0];
-                    String start = userInput.split(" /from ")[1];
-                    start = start.split(" /to ")[0];
-                    String end = userInput.split(" /to ")[1];
-                    tasks[Task.getNumOfTasks()] = new Event(description, start, end.stripTrailing());
-                    printTaskAdded();
-                    break;
-                }
-
-                default: {
-                    printLongLine();
-                    System.out.println("Unknown input");
-                    printLongLine();
-                    break;
-                }
-
+            } catch (CoveException e) {
+                System.out.println(e.getMessage());
             }
 
         }
+
     }
 
     public static void printLongLine() {
