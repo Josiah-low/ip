@@ -124,7 +124,8 @@ public class Cove {
         System.out.println();
     }
 
-    // command handling
+    // Command Handling
+
     public static void handleBye(String userInput) throws CoveException {
         if (!userInput.trim().equals("bye")) throw new CoveException("'bye' command does not accept any parameters.");
         printExit();

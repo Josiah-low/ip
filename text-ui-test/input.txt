@@ -6,5 +6,19 @@ mark 1
 list
 unmark 1
 list
-
+bye 1
+list 1
+mark 1 2
+unmark 1 2
+todo
+deadline homework
+deadline /by Monday
+deadline homework /by
+event party
+event party /from 3pm
+event party /to 4pm
+event /from 3pm /to 4pm
+event party /from /to 4pm
+event party /from 3pm /to
+hello
 bye
