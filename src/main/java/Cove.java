@@ -1,4 +1,3 @@
-import java.util.Objects;
 import java.util.Scanner;
 
 public class Cove {
@@ -12,49 +11,67 @@ public class Cove {
             String userInput = scanner.nextLine();
             printLongLine();
             String command = userInput.split(" ")[0];
-            if (userInput.equals("bye")) {
-                break;
-            } else if (userInput.equals("list")) {
-                printTaskList();
-            } else if (userInput.equals("mark")) {
-                String[] words = userInput.split(" ");
-                int taskIndex = Integer.parseInt(words[1]);
-                markTaskAsDone(taskIndex);
-            } else if (userInput.equals("unmark")) {
-                String[] words = userInput.split(" ");
-                int taskIndex = Integer.parseInt(words[1]);
-                unmarkTaskAsDone(taskIndex);
-            } else {
-                // Add task
-                System.out.println(" Got it. I've added this task:");
-                switch (command) {
-                    case "todo" -> {
-                        String description = userInput.split("todo ")[1];
-                        tasks[Task.getNumOfTasks()] = new ToDo(description);
-                    }
-                    case "deadline" -> {
-                        String description = userInput.split("deadline ")[1];
-                        description = description.split(" /by ")[0];
-                        String by = userInput.split(" /by ")[1];
-                        tasks[Task.getNumOfTasks()] = new Deadline(description, by.stripTrailing());
-                    }
-                    case "event" -> {
-                        String description = userInput.split("event ")[1];
-                        description = description.split(" /from ")[0];
-                        String start = userInput.split(" /from ")[1];
-                        start = start.split(" /to ")[0];
-                        String end = userInput.split(" /to ")[1];
-                        tasks[Task.getNumOfTasks()] = new Event(description, start, end.stripTrailing());
-                    }
-                }
-                System.out.println(" " + tasks[Task.getNumOfTasks() - 1].toString());
-                printNumOfTasks();
-                printLongLine();
-                System.out.println();
-            }
-        }
 
-        printExit();
+            switch (command) {
+                case "bye":
+                    printExit();
+                    return;
+
+                case "list":
+                    printTaskList();
+                    break;
+
+                case "mark": {
+                    String[] words = userInput.split(" ");
+                    int taskIndex = Integer.parseInt(words[1]);
+                    markTaskAsDone(taskIndex);
+                    break;
+                }
+
+                case "unmark": {
+                    String[] words = userInput.split(" ");
+                    int taskIndex = Integer.parseInt(words[1]);
+                    unmarkTaskAsDone(taskIndex);
+                    break;
+                }
+
+                case "todo": {
+                    String description = userInput.split("todo ")[1];
+                    tasks[Task.getNumOfTasks()] = new ToDo(description);
+                    printTaskAdded();
+                    break;
+                }
+
+                case "deadline": {
+                    String description = userInput.split("deadline ")[1];
+                    description = description.split(" /by ")[0];
+                    String by = userInput.split(" /by ")[1];
+                    tasks[Task.getNumOfTasks()] = new Deadline(description, by.stripTrailing());
+                    printTaskAdded();
+                    break;
+                }
+
+                case "event": {
+                    String description = userInput.split("event ")[1];
+                    description = description.split(" /from ")[0];
+                    String start = userInput.split(" /from ")[1];
+                    start = start.split(" /to ")[0];
+                    String end = userInput.split(" /to ")[1];
+                    tasks[Task.getNumOfTasks()] = new Event(description, start, end.stripTrailing());
+                    printTaskAdded();
+                    break;
+                }
+
+                default: {
+                    printLongLine();
+                    System.out.println("Unknown input");
+                    printLongLine();
+                    break;
+                }
+
+            }
+
+        }
     }
 
     public static void printLongLine() {
@@ -111,6 +128,14 @@ public class Cove {
         } else {
             System.out.println(" Now you have " + Task.getNumOfTasks() + " tasks in the list.");
         }
+    }
+
+    public static void printTaskAdded() {
+        System.out.println(" Got it. I've added this task:");
+        System.out.println(" " + tasks[Task.getNumOfTasks() - 1].toString());
+        printNumOfTasks();
+        printLongLine();
+        System.out.println();
     }
 
 }
