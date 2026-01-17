@@ -4,4 +4,12 @@ public class ToDo extends Task {
         super(description);
     }
 
+    @Override
+    public String toString() {
+        if (this.getIsDone()) {
+            return "[T][X] " + this.getDescription();
+        } else {
+            return "[T][ ] " + this.getDescription();
+        }
+    }
 }

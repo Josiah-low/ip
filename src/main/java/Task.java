@@ -22,7 +22,7 @@ public class Task {
         return numOfTasks;
     }
 
-    public boolean isDone() {
+    public boolean getIsDone() {
         return this.isDone;
     }
 
