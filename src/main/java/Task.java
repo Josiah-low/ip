@@ -19,7 +19,11 @@ public class Task {
     }
 
     public void printTask() {
-        System.out.printf(" %d. %s\n", this.index, this.name);
+        if (this.isDone) {
+            System.out.printf(" %d.[X] %s\n", this.index, this.name);
+        } else {
+            System.out.printf(" %d.[ ] %s\n", this.index, this.name);
+        }
     }
 
     public static int getNumOfTasks() {
@@ -45,4 +49,5 @@ public class Task {
     public void markAsNotDone() {
         this.isDone = false;
     }
+
 }
