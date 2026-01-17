@@ -4,6 +4,9 @@ import java.util.Scanner;
 public class Cove {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+
+        String[] tasks = new String[100];
+
         printGreeting();
 
         while(true) {
