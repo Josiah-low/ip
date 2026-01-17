@@ -4,8 +4,8 @@ public class Task {
     private static int numOfTasks = 0;
     private boolean isDone;
 
-    public Task(String name) {
-        this.description = name;
+    public Task(String description) {
+        this.description = description;
         numOfTasks++;
         this.index = numOfTasks;
     }
