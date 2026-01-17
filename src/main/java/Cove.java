@@ -15,13 +15,11 @@ public class Cove {
 
                 switch (command) {
                     case "bye":
-                        if (!userInput.trim().equals("bye")) throw new CoveException("'bye' command does not accept any parameters.");
-                        printExit();
+                        handleBye(userInput);
                         return;
 
                     case "list":
-                        if (!userInput.trim().equals("list")) throw new CoveException("'list' command does not accept any parameters.");
-                        printTaskList();
+                        handleList(userInput);
                         break;
 
                     case "mark": {
@@ -127,6 +125,15 @@ public class Cove {
     }
 
     // command handling
+    public static void handleBye(String userInput) throws CoveException {
+        if (!userInput.trim().equals("bye")) throw new CoveException("'bye' command does not accept any parameters.");
+        printExit();
+    }
+
+    public static void handleList(String userInput) throws CoveException {
+        if (!userInput.trim().equals("list")) throw new CoveException("'list' command does not accept any parameters.");
+        printTaskList();
+    }
 
     public static void handleMark(String userInput) throws CoveException {
         String[] words = userInput.split(" ");
