@@ -36,9 +36,9 @@ public class Task {
 
     public void printDoneStatus() {
         if (this.isDone) {
-            System.out.println("  [X] " + this.name);
+            System.out.println("   [X] " + this.name);
         } else {
-            System.out.println("  [ ] " + this.name);
+            System.out.println("   [ ] " + this.name);
         }
     }
 
