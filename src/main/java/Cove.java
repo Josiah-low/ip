@@ -49,4 +49,12 @@ public class Cove {
         printLongLine();
     }
 
+    public static void markTaskAsDone(int taskIndex) {
+        Task task = tasks[taskIndex];
+        task.markAsDone();
+        System.out.println(" Nice! I've marked this task as done:");
+        task.printDoneStatus();
+        printLongLine();
+    }
+
 }
