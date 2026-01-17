@@ -1,12 +1,7 @@
 public class Cove {
     public static void main(String[] args) {
         printGreeting();
-
-        String exit =
-                " Bye. Hope to see you again soon!";
-
-        System.out.println(exit);
-        printLongLine();
+        printExit();
     }
 
     public static void printLongLine() {
@@ -17,6 +12,11 @@ public class Cove {
         printLongLine();
         System.out.println(" Hello! I'm Cove");
         System.out.println(" What can I do for you?");
+        printLongLine();
+    }
+
+    public static void printExit() {
+        System.out.println(" Bye. Hope to see you again soon!");
         printLongLine();
     }
 }
