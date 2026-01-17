@@ -2,10 +2,10 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class Cove {
+    private static Task[] tasks = new Task[100];
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-
-        Task[] tasks = new Task[100];
 
         printGreeting();
 
@@ -48,4 +48,5 @@ public class Cove {
         System.out.println(" Bye. Hope to see you again soon!");
         printLongLine();
     }
+
 }

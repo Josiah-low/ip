@@ -30,6 +30,14 @@ public class Task {
         return this.isDone;
     }
 
+    public void printDoneStatus() {
+        if (this.isDone) {
+            System.out.println("  [X] " + this.name);
+        } else {
+            System.out.println("  [ ] " + this.name);
+        }
+    }
+
     public void markAsDone() {
         this.isDone = true;
     }
