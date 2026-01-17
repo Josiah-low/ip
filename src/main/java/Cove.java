@@ -50,9 +50,7 @@ public class Cove {
                     }
 
                     default: {
-                        System.out.println("Unknown input");
-                        printLongLine();
-                        System.out.println();
+                        handleUnknownCommand();
                         break;
                     }
                 }
@@ -200,4 +198,7 @@ public class Cove {
         printTaskAdded();
     }
 
+    public static void handleUnknownCommand() throws CoveException {
+        throw new CoveException("OOPS! I don't understand what you mean!");
+    }
 }
