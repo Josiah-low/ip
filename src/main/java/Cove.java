@@ -1,13 +1,22 @@
 public class Cove {
     public static void main(String[] args) {
-        String greeting =
-                "____________________________________________________________\n" +
-                " Hello! I'm Cove\n" +
-                " What can I do for you?\n" +
-                "____________________________________________________________\n";
+        printGreeting();
+
         String exit =
-                " Bye. Hope to see you again soon!\n" +
-                "____________________________________________________________";
-        System.out.println("Hello from\n" + greeting + exit);
+                " Bye. Hope to see you again soon!";
+
+        System.out.println(exit);
+        printLongLine();
+    }
+
+    public static void printLongLine() {
+        System.out.println("____________________________________________________________");
+    }
+
+    public static void printGreeting() {
+        printLongLine();
+        System.out.println(" Hello! I'm Cove");
+        System.out.println(" What can I do for you?");
+        printLongLine();
     }
 }
