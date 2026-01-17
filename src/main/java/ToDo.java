@@ -6,10 +6,6 @@ public class ToDo extends Task {
 
     @Override
     public String toString() {
-        if (this.getIsDone()) {
-            return "[T][X] " + this.getDescription();
-        } else {
-            return "[T][ ] " + this.getDescription();
-        }
+        return "[T]" + super.toString();
     }
 }
