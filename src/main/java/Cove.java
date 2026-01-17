@@ -54,7 +54,7 @@ public class Cove {
         Task task = tasks[taskIndex - 1];
         task.markAsDone();
         System.out.println(" Nice! I've marked this task as done:");
-        task.printDoneStatus();
+        System.out.println(" " + task.toString());
         printLongLine();
     }
 
@@ -62,7 +62,7 @@ public class Cove {
         Task task = tasks[taskIndex - 1];
         task.markAsNotDone();
         System.out.println(" OK, I've marked this task as not done yet:");
-        task.printDoneStatus();
+        System.out.println(" " + task.toString());
         printLongLine();
     }
 
@@ -73,7 +73,7 @@ public class Cove {
                 printLongLine();
                 break;
             } else {
-                task.printTask();
+                System.out.printf(" %d.%s\n", task.getIndex(), task.toString());
             }
         }
     }
