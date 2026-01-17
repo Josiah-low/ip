@@ -15,14 +15,7 @@ public class Cove {
             if (Objects.equals(userInput, "bye")) {
                 break;
             } else if (Objects.equals(userInput, "list")) {
-                for (Task task : tasks) {
-                    if (task == null) {
-                        printLongLine();
-                        break;
-                    } else {
-                        task.printTask();
-                    }
-                }
+                printTaskList();
             } else if (userInput.startsWith("mark ")) {
                 String[] words = userInput.split(" ");
                 int taskIndex = Integer.parseInt(words[1]);
@@ -71,6 +64,17 @@ public class Cove {
         System.out.println(" OK, I've marked this task as not done yet:");
         task.printDoneStatus();
         printLongLine();
+    }
+
+    public static void printTaskList() {
+        for (Task task : tasks) {
+            if (task == null) {
+                printLongLine();
+                break;
+            } else {
+                task.printTask();
+            }
+        }
     }
 
 }
