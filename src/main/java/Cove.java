@@ -4,7 +4,10 @@ public class Cove {
                 "____________________________________________________________\n" +
                 " Hello! I'm Cove\n" +
                 " What can I do for you?\n" +
+                "____________________________________________________________\n";
+        String exit =
+                " Bye. Hope to see you again soon!\n" +
                 "____________________________________________________________";
-        System.out.println("Hello from\n" + greeting);
+        System.out.println("Hello from\n" + greeting + exit);
     }
 }
