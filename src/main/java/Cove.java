@@ -47,6 +47,7 @@ public class Cove {
                 System.out.println(" " + tasks[Task.getNumOfTasks() - 1].toString());
                 printNumOfTasks();
                 printLongLine();
+                System.out.println();
             }
         }
         printExit();
@@ -61,6 +62,7 @@ public class Cove {
         System.out.println(" Hello! I'm Cove");
         System.out.println(" What can I do for you?");
         printLongLine();
+        System.out.println();
     }
 
     public static void printExit() {
@@ -74,6 +76,7 @@ public class Cove {
         System.out.println(" Nice! I've marked this task as done:");
         System.out.println(" " + task.toString());
         printLongLine();
+        System.out.println();
     }
 
     public static void unmarkTaskAsDone(int taskIndex) {
@@ -82,6 +85,7 @@ public class Cove {
         System.out.println(" OK, I've marked this task as not done yet:");
         System.out.println(" " + task.toString());
         printLongLine();
+        System.out.println();
     }
 
     public static void printTaskList() {
@@ -89,6 +93,7 @@ public class Cove {
         for (Task task : tasks) {
             if (task == null) {
                 printLongLine();
+                System.out.println();
                 break;
             } else {
                 System.out.printf(" %d.%s\n", task.getIndex(), task.toString());
