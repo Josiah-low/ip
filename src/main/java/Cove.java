@@ -15,33 +15,27 @@ public class Cove {
 
                 switch (command) {
                     case "bye":
-                        if (!userInput.equals("bye")) throw new CoveException("'bye' command does not accept any parameters");
+                        if (!userInput.equals("bye")) throw new CoveException("'bye' command does not accept any parameters.");
                         printExit();
                         return;
 
                     case "list":
-                        if (!userInput.equals("list")) throw new CoveException("'list' command does not accept any parameters");
+                        if (!userInput.equals("list")) throw new CoveException("'list' command does not accept any parameters.");
                         printTaskList();
                         break;
 
                     case "mark": {
-                        String[] words = userInput.split(" ");
-                        int taskIndex = Integer.parseInt(words[1]);
-                        markTaskAsDone(taskIndex);
+                        handleMark(userInput);
                         break;
                     }
 
                     case "unmark": {
-                        String[] words = userInput.split(" ");
-                        int taskIndex = Integer.parseInt(words[1]);
-                        unmarkTaskAsDone(taskIndex);
+                        handleUnmark(userInput);
                         break;
                     }
 
                     case "todo": {
-                        String description = userInput.split("todo ")[1];
-                        tasks[Task.getNumOfTasks()] = new ToDo(description);
-                        printTaskAdded();
+                        handleToDo();
                         break;
                     }
 
@@ -141,6 +135,36 @@ public class Cove {
         printNumOfTasks();
         printLongLine();
         System.out.println();
+    }
+
+    // command handling
+
+    public static void handleMark(String userInput) throws CoveException {
+        String[] words = userInput.split(" ");
+        if (words.length < 2) {
+            throw new CoveException("OOPS! You didn't specify a task number to mark.");
+        } else if (words.length > 2) {
+            throw new CoveException("OOPS! 'mark' command only accepts 1 parameter.");
+        }
+        int taskIndex = Integer.parseInt(words[1]);
+        markTaskAsDone(taskIndex);
+    }
+
+    public static void handleUnmark(String userInput) throws CoveException {
+        String[] words = userInput.split(" ");
+        if (words.length < 2) {
+            throw new CoveException("OOPS! You didn't specify a task number to unmark as done.");
+        } else if (words.length > 2) {
+            throw new CoveException("OOPS! 'unmark' command only accepts 1 parameter.");
+        }
+        int taskIndex = Integer.parseInt(words[1]);
+        unmarkTaskAsDone(taskIndex);
+    }
+
+    public static void handleToDo(String userInput) {
+        String description = userInput.split("todo ")[1];
+        tasks[Task.getNumOfTasks()] = new ToDo(description);
+        printTaskAdded();
     }
 
 }
