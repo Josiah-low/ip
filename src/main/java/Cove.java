@@ -5,7 +5,7 @@ public class Cove {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        String[] tasks = new String[100];
+        Task[] tasks = new Task[100];
 
         printGreeting();
 
@@ -14,8 +14,18 @@ public class Cove {
             printLongLine();
             if (Objects.equals(userInput, "bye")) {
                 break;
+            } else if (Objects.equals(userInput, "list")) {
+                for (Task task : tasks) {
+                    if (task == null) {
+                        printLongLine();
+                        break;
+                    } else {
+                        task.printTask();
+                    }
+                }
             } else {
-                System.out.println(" " + userInput);
+                System.out.println(" added: " + userInput);
+                tasks[Task.getNumOfTasks()] = new Task(userInput);
                 printLongLine();
             }
         }

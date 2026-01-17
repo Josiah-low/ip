@@ -16,4 +16,12 @@ public class Task {
     public int getIndex() {
         return this.index;
     }
+
+    public void printTask() {
+        System.out.printf(" %d. %s\n", this.index, this.name);
+    }
+
+    public static int getNumOfTasks() {
+        return numOfTasks;
+    }
 }
