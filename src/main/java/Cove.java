@@ -40,11 +40,7 @@ public class Cove {
                     }
 
                     case "deadline": {
-                        String description = userInput.split("deadline ")[1];
-                        description = description.split(" /by ")[0];
-                        String by = userInput.split(" /by ")[1];
-                        tasks[Task.getNumOfTasks()] = new Deadline(description, by.stripTrailing());
-                        printTaskAdded();
+                        handleDeadline(userInput);
                         break;
                     }
 
@@ -163,11 +159,28 @@ public class Cove {
     }
 
     public static void handleToDo(String userInput) throws CoveException {
-        String description = userInput.split("todo ", 2)[1];
-        if (description.replaceAll("\\s+","").isEmpty()) {
+        String description = userInput.split("todo", 2)[1].trim();
+        if (description.isEmpty()) {
             throw new CoveException("OOPS! The description of a todo cannot be empty.");
         }
         tasks[Task.getNumOfTasks()] = new ToDo(description);
+        printTaskAdded();
+    }
+
+    public static void handleDeadline(String userInput) throws CoveException {
+        String description = userInput.split("deadline", 2)[1];
+        if (!userInput.contains("/by")) {
+            throw new CoveException("OOPS! Please specify a deadline with /by.");
+        }
+        description = description.split("/by")[0].trim();
+        if (description.isEmpty()) {
+            throw new CoveException("OOPS! The description of a deadline cannot be empty.");
+        }
+        String by = userInput.split("/by")[1].trim();
+        if (by.isEmpty()) {
+            throw new CoveException("OOPS! You didn't specify the deadline.");
+        }
+        tasks[Task.getNumOfTasks()] = new Deadline(description, by);
         printTaskAdded();
     }
 
