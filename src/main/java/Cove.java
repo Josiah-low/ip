@@ -67,6 +67,7 @@ public class Cove {
     }
 
     public static void printTaskList() {
+        System.out.println(" Here are the tasks in your list:");
         for (Task task : tasks) {
             if (task == null) {
                 printLongLine();
