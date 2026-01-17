@@ -1,9 +1,22 @@
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Cove {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         printGreeting();
+
+        while(true) {
+            String userInput = scanner.nextLine();
+            printLongLine();
+            if (Objects.equals(userInput, "bye")) {
+                break;
+            } else {
+                System.out.println(" " + userInput);
+                printLongLine();
+            }
+        }
+
         printExit();
     }
 
