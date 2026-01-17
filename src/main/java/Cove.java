@@ -45,13 +45,7 @@ public class Cove {
                     }
 
                     case "event": {
-                        String description = userInput.split("event ")[1];
-                        description = description.split(" /from ")[0];
-                        String start = userInput.split(" /from ")[1];
-                        start = start.split(" /to ")[0];
-                        String end = userInput.split(" /to ")[1];
-                        tasks[Task.getNumOfTasks()] = new Event(description, start, end.stripTrailing());
-                        printTaskAdded();
+                        handleEvent(userInput);
                         break;
                     }
 
@@ -172,15 +166,37 @@ public class Cove {
         if (!userInput.contains("/by")) {
             throw new CoveException("OOPS! Please specify a deadline with /by.");
         }
-        description = description.split("/by")[0].trim();
+        description = description.split("/by", 2)[0].trim();
         if (description.isEmpty()) {
             throw new CoveException("OOPS! The description of a deadline cannot be empty.");
         }
-        String by = userInput.split("/by")[1].trim();
+        String by = userInput.split("/by", 2)[1].trim();
         if (by.isEmpty()) {
             throw new CoveException("OOPS! You didn't specify the deadline.");
         }
         tasks[Task.getNumOfTasks()] = new Deadline(description, by);
+        printTaskAdded();
+    }
+
+    public static void handleEvent(String userInput) throws CoveException {
+        String description = userInput.split("event", 2)[1];
+        if (!userInput.contains("/from") || !userInput.contains("/to")) {
+            throw new CoveException("OOPS! Please specify a start date/time with /from and an end date/time with /to.");
+        }
+        description = description.split("/from", 2)[0].trim();
+        if (description.isEmpty()) {
+            throw new CoveException("OOPS! The description of an event cannot be empty.");
+        }
+        String start = userInput.split("/from")[1];
+        start = start.split("/to", 2)[0].trim();
+        if (start.isEmpty()) {
+            throw new CoveException("OOPS! You didn't provide a start date/time.");
+        }
+        String end = userInput.split("/to", 2)[1].trim();
+        if (end.isEmpty()) {
+            throw new CoveException("OOPS! You didn't provide a end date/time.");
+        }
+        tasks[Task.getNumOfTasks()] = new Event(description, start, end.stripTrailing());
         printTaskAdded();
     }
 
