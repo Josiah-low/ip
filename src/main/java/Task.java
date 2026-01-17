@@ -1,17 +1,17 @@
 public class Task {
-    private String name;
+    private String description;
     private int index;
     private static int numOfTasks = 0;
     private boolean isDone;
 
     public Task(String name) {
-        this.name = name;
+        this.description = name;
         numOfTasks++;
         this.index = numOfTasks;
     }
 
-    public String getName() {
-        return this.name;
+    public String getDescription() {
+        return this.description;
     }
 
     public int getIndex() {
@@ -20,9 +20,9 @@ public class Task {
 
     public void printTask() {
         if (this.isDone) {
-            System.out.printf(" %d.[X] %s\n", this.index, this.name);
+            System.out.printf(" %d.[X] %s\n", this.index, this.description);
         } else {
-            System.out.printf(" %d.[ ] %s\n", this.index, this.name);
+            System.out.printf(" %d.[ ] %s\n", this.index, this.description);
         }
     }
 
@@ -36,9 +36,9 @@ public class Task {
 
     public void printDoneStatus() {
         if (this.isDone) {
-            System.out.println("   [X] " + this.name);
+            System.out.println("   [X] " + this.description);
         } else {
-            System.out.println("   [ ] " + this.name);
+            System.out.println("   [ ] " + this.description);
         }
     }
 
