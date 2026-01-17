@@ -35,16 +35,17 @@ public class Cove {
                     String[] words = userInput.split(" /by ");
                     String description = words[0].split(" ")[1];
                     String by = words[1];
-                    tasks[Task.getNumOfTasks()] = new Deadline(description, by);
+                    tasks[Task.getNumOfTasks()] = new Deadline(description, by.stripTrailing());
                 } else if (Objects.equals(command, "event")) {
                     String description = userInput.split("event ")[1];
-                    description = description.split("/from ")[0];
-                    String start = userInput.split("/from ")[1];
-                    start = start.split("/to")[0];
-                    String end = userInput.split("/to ")[1];
-                    tasks[Task.getNumOfTasks()] = new Event(description, start, end);
+                    description = description.split(" /from ")[0];
+                    String start = userInput.split(" /from ")[1];
+                    start = start.split(" /to ")[0];
+                    String end = userInput.split(" /to ")[1];
+                    tasks[Task.getNumOfTasks()] = new Event(description, start, end.stripTrailing());
                 }
                 System.out.println(" " + tasks[Task.getNumOfTasks() - 1].toString());
+                printNumOfTasks();
                 printLongLine();
             }
         }
@@ -92,6 +93,14 @@ public class Cove {
             } else {
                 System.out.printf(" %d.%s\n", task.getIndex(), task.toString());
             }
+        }
+    }
+
+    public static void printNumOfTasks() {
+        if (Task.getNumOfTasks() == 1) {
+            System.out.println(" Now you have 1 task in the list.");
+        } else {
+            System.out.println(" Now you have " + Task.getNumOfTasks() + " tasks in the list.");
         }
     }
 
