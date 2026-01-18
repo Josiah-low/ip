@@ -116,6 +116,7 @@ public class Cove {
         System.out.println("   " + task.toString());
         printNumOfTasks();
         printLongLine();
+        System.out.println();
     }
 
     public static void printNumOfTasks() {
@@ -154,6 +155,9 @@ public class Cove {
             throw new CoveException("OOPS! 'mark' command only accepts 1 parameter.");
         }
         int taskIndex = Integer.parseInt(words[1]);
+        if (taskIndex < 1 || taskIndex > tasks.size()) {
+            throw new CoveException("OOPS! The task number you provided is invalid.");
+        }
         markTaskAsDone(taskIndex);
     }
 
@@ -165,6 +169,9 @@ public class Cove {
             throw new CoveException("OOPS! 'unmark' command only accepts 1 parameter.");
         }
         int taskIndex = Integer.parseInt(words[1]);
+        if (taskIndex < 1 || taskIndex > tasks.size()) {
+            throw new CoveException("OOPS! The task number you provided is invalid.");
+        }
         unmarkTaskAsDone(taskIndex);
     }
 
@@ -228,6 +235,9 @@ public class Cove {
             throw new CoveException("OOPS! 'delete' command only accepts 1 parameter.");
         }
         int taskIndex = Integer.parseInt(words[1]);
+        if (taskIndex < 1 || taskIndex > tasks.size()) {
+            throw new CoveException("OOPS! The task number you provided is invalid.");
+        }
         deleteTask(taskIndex);
     }
 }
