@@ -1,7 +1,8 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Cove {
-    private static Task[] tasks = new Task[100];
+    private static ArrayList<Task> tasks = new ArrayList<Task>();
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -78,7 +79,7 @@ public class Cove {
     }
 
     public static void markTaskAsDone(int taskIndex) {
-        Task task = tasks[taskIndex - 1];
+        Task task = tasks.get(taskIndex - 1);
         task.markAsDone();
         System.out.println(" Nice! I've marked this task as done:");
         System.out.println(" " + task.toString());
@@ -87,7 +88,7 @@ public class Cove {
     }
 
     public static void unmarkTaskAsDone(int taskIndex) {
-        Task task = tasks[taskIndex - 1];
+        Task task = tasks.get(taskIndex - 1);
         task.markAsNotDone();
         System.out.println(" OK, I've marked this task as not done yet:");
         System.out.println(" " + task.toString());
@@ -97,28 +98,24 @@ public class Cove {
 
     public static void printTaskList() {
         System.out.println(" Here are the tasks in your list:");
-        for (Task task : tasks) {
-            if (task == null) {
-                printLongLine();
-                System.out.println();
-                break;
-            } else {
-                System.out.printf(" %d.%s\n", task.getIndex(), task.toString());
-            }
+        for (int i = 1; i <= tasks.size(); i++) {
+            System.out.printf(" %d.%s\n", i, tasks.get(i - 1).toString());
         }
+        printLongLine();
+        System.out.println();
     }
 
     public static void printNumOfTasks() {
-        if (Task.getNumOfTasks() == 1) {
+        if (tasks.size() == 1) {
             System.out.println(" Now you have 1 task in the list.");
         } else {
-            System.out.println(" Now you have " + Task.getNumOfTasks() + " tasks in the list.");
+            System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
         }
     }
 
     public static void printTaskAdded() {
         System.out.println(" Got it. I've added this task:");
-        System.out.println(" " + tasks[Task.getNumOfTasks() - 1].toString());
+        System.out.println(" " + tasks.get(tasks.size() - 1).toString());
         printNumOfTasks();
         printLongLine();
         System.out.println();
@@ -127,12 +124,12 @@ public class Cove {
     // Command Handling
 
     public static void handleBye(String userInput) throws CoveException {
-        if (!userInput.trim().equals("bye")) throw new CoveException("'bye' command does not accept any parameters.");
+        if (!userInput.trim().equals("bye")) throw new CoveException("OOPS! 'bye' command does not accept any parameters.");
         printExit();
     }
 
     public static void handleList(String userInput) throws CoveException {
-        if (!userInput.trim().equals("list")) throw new CoveException("'list' command does not accept any parameters.");
+        if (!userInput.trim().equals("list")) throw new CoveException("OOPS! 'list' command does not accept any parameters.");
         printTaskList();
     }
 
@@ -163,7 +160,7 @@ public class Cove {
         if (description.isEmpty()) {
             throw new CoveException("OOPS! The description of a todo cannot be empty.");
         }
-        tasks[Task.getNumOfTasks()] = new ToDo(description);
+        tasks.add(new ToDo(description));
         printTaskAdded();
     }
 
@@ -180,7 +177,7 @@ public class Cove {
         if (by.isEmpty()) {
             throw new CoveException("OOPS! You didn't specify the deadline.");
         }
-        tasks[Task.getNumOfTasks()] = new Deadline(description, by);
+        tasks.add(new Deadline(description, by));
         printTaskAdded();
     }
 
@@ -202,7 +199,7 @@ public class Cove {
         if (end.isEmpty()) {
             throw new CoveException("OOPS! You didn't provide a end date/time.");
         }
-        tasks[Task.getNumOfTasks()] = new Event(description, start, end.stripTrailing());
+        tasks.add(new Event(description, start, end));
         printTaskAdded();
     }
 

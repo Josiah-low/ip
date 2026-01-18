@@ -53,63 +53,63 @@ ____________________________________________________________
 ____________________________________________________________
 
 ____________________________________________________________
-'bye' command does not accept any parameters.
+ OOPS! 'bye' command does not accept any parameters.
 ____________________________________________________________
 
 ____________________________________________________________
-'list' command does not accept any parameters.
+ OOPS! 'list' command does not accept any parameters.
 ____________________________________________________________
 
 ____________________________________________________________
-OOPS! 'mark' command only accepts 1 parameter.
+ OOPS! 'mark' command only accepts 1 parameter.
 ____________________________________________________________
 
 ____________________________________________________________
-OOPS! 'unmark' command only accepts 1 parameter.
+ OOPS! 'unmark' command only accepts 1 parameter.
 ____________________________________________________________
 
 ____________________________________________________________
-OOPS! The description of a todo cannot be empty.
+ OOPS! The description of a todo cannot be empty.
 ____________________________________________________________
 
 ____________________________________________________________
-OOPS! Please specify a deadline with /by.
+ OOPS! Please specify a deadline with /by.
 ____________________________________________________________
 
 ____________________________________________________________
-OOPS! The description of a deadline cannot be empty.
+ OOPS! The description of a deadline cannot be empty.
 ____________________________________________________________
 
 ____________________________________________________________
-OOPS! You didn't specify the deadline.
+ OOPS! You didn't specify the deadline.
 ____________________________________________________________
 
 ____________________________________________________________
-OOPS! Please specify a start date/time with /from and an end date/time with /to.
+ OOPS! Please specify a start date/time with /from and an end date/time with /to.
 ____________________________________________________________
 
 ____________________________________________________________
-OOPS! Please specify a start date/time with /from and an end date/time with /to.
+ OOPS! Please specify a start date/time with /from and an end date/time with /to.
 ____________________________________________________________
 
 ____________________________________________________________
-OOPS! Please specify a start date/time with /from and an end date/time with /to.
+ OOPS! Please specify a start date/time with /from and an end date/time with /to.
 ____________________________________________________________
 
 ____________________________________________________________
-OOPS! The description of an event cannot be empty.
+ OOPS! The description of an event cannot be empty.
 ____________________________________________________________
 
 ____________________________________________________________
-OOPS! You didn't provide a start date/time.
+ OOPS! You didn't provide a start date/time.
 ____________________________________________________________
 
 ____________________________________________________________
-OOPS! You didn't provide a end date/time.
+ OOPS! You didn't provide a end date/time.
 ____________________________________________________________
 
 ____________________________________________________________
-OOPS! I don't understand what you mean!
+ OOPS! I don't understand what you mean!
 ____________________________________________________________
 
 ____________________________________________________________
