@@ -48,6 +48,11 @@ public class Cove {
                         break;
                     }
 
+                    case "delete": {
+                        handleDelete(userInput);
+                        break;
+                    }
+
                     default: {
                         handleUnknownCommand();
                         break;
@@ -103,6 +108,14 @@ public class Cove {
         }
         printLongLine();
         System.out.println();
+    }
+
+    public static void deleteTask(int taskIndex) {
+        System.out.println(" Noted. I've removed this task:");
+        Task task = tasks.remove(taskIndex - 1);
+        System.out.println("   " + task.toString());
+        printNumOfTasks();
+        printLongLine();
     }
 
     public static void printNumOfTasks() {
@@ -205,5 +218,16 @@ public class Cove {
 
     public static void handleUnknownCommand() throws CoveException {
         throw new CoveException("OOPS! I don't understand what you mean!");
+    }
+
+    public static void handleDelete(String userInput) throws CoveException {
+        String[] words = userInput.split(" ");
+        if (words.length < 2) {
+            throw new CoveException("OOPS! You didn't specify a task number to delete.");
+        } else if (words.length > 2) {
+            throw new CoveException("OOPS! 'delete' command only accepts 1 parameter.");
+        }
+        int taskIndex = Integer.parseInt(words[1]);
+        deleteTask(taskIndex);
     }
 }
