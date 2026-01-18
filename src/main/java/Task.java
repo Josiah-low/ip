@@ -1,25 +1,13 @@
 public abstract class Task {
     private String description;
-    private int index;
-    private static int numOfTasks = 0;
     private boolean isDone;
 
     public Task(String description) {
         this.description = description;
-        numOfTasks++;
-        this.index = numOfTasks;
     }
 
     public String getDescription() {
         return this.description;
-    }
-
-    public int getIndex() {
-        return this.index;
-    }
-
-    public static int getNumOfTasks() {
-        return numOfTasks;
     }
 
     public boolean getIsDone() {
