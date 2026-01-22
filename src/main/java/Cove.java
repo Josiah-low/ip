@@ -1,5 +1,7 @@
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.io.File;
 
 public class Cove {
     private static ArrayList<Task> tasks = new ArrayList<Task>();
@@ -8,7 +10,20 @@ public class Cove {
         Scanner scanner = new Scanner(System.in);
         printGreeting();
 
-        while(true) {
+        // for save
+        File data = new File("./data/cove.txt");
+        try {
+            if (data.createNewFile()) {
+                System.out.println("Data file created");
+            } else {
+                System.out.println("Data file already exists");
+            }
+        } catch (IOException e) {
+            System.out.println("IOException");
+        }
+
+
+        while (true) {
             try {
                 String userInput = scanner.nextLine();
                 printLongLine();
@@ -138,12 +153,14 @@ public class Cove {
     // Command Handling
 
     public static void handleBye(String userInput) throws CoveException {
-        if (!userInput.trim().equals("bye")) throw new CoveException("OOPS! 'bye' command does not accept any parameters.");
+        if (!userInput.trim().equals("bye"))
+            throw new CoveException("OOPS! 'bye' command does not accept any parameters.");
         printExit();
     }
 
     public static void handleList(String userInput) throws CoveException {
-        if (!userInput.trim().equals("list")) throw new CoveException("OOPS! 'list' command does not accept any parameters.");
+        if (!userInput.trim().equals("list"))
+            throw new CoveException("OOPS! 'list' command does not accept any parameters.");
         printTaskList();
     }
 
