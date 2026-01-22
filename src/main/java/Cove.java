@@ -1,7 +1,11 @@
 import java.io.IOException;
+import java.nio.file.Paths;
+import java.nio.file.Files;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.io.File;
+import java.io.FileWriter;
+
 
 public class Cove {
     private static ArrayList<Task> tasks = new ArrayList<Task>();
@@ -19,9 +23,9 @@ public class Cove {
                 System.out.println("Data file already exists");
             }
         } catch (IOException e) {
-            System.out.println("IOException");
+            System.out.println("Something went wrong: " + e.getMessage());
         }
-
+        loadTasks();
 
         while (true) {
             try {
@@ -257,4 +261,62 @@ public class Cove {
         }
         deleteTask(taskIndex);
     }
+
+    private static void appendToFile(String filePath, String text) throws IOException {
+        FileWriter fileWriter = new FileWriter(filePath, true);
+        fileWriter.write(text);
+        fileWriter.close();
+    }
+
+    private static void loadTasks() {
+        try {
+            File data = new File("./data/cove.txt");
+            Scanner scanner = new Scanner(data);
+
+            while (scanner.hasNext()) {
+                loadTask(scanner.next());
+            }
+            scanner.close();
+
+        } catch (IOException e) {
+            System.out.println("Something went wrong: " + e.getMessage());
+        } catch (CoveException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void loadTask(String dataString) throws CoveException {
+        switch(dataString.charAt(0)) {
+            case 'T': {
+                String description = dataString.split("\\|", 2)[1];
+                Task taskToLoad = new ToDo(description);
+                if (dataString.charAt(1) == '1') taskToLoad.markAsDone();
+                tasks.add(taskToLoad);
+                break;
+            }
+            case 'D': {
+                String[] words = dataString.split("\\|", 3);
+                String description = words[1];
+                String by = words[2];
+                Task taskToLoad = new Deadline(description, by);
+                if (dataString.charAt(1) == '1') taskToLoad.markAsDone();
+                tasks.add(taskToLoad);
+                break;
+            }
+            case 'E': {
+                String[] words = dataString.split("\\|", 4);
+                String description = words[1];
+                String start = words[2];
+                String end = words[3];
+                Task taskToLoad = new Event(description, start, end);
+                if (dataString.charAt(1) == '1') taskToLoad.markAsDone();
+                tasks.add(taskToLoad);
+                break;
+            }
+            default: {
+                throw new CoveException("Error loading tasks");
+            }
+        }
+    }
+
 }

@@ -31,4 +31,12 @@ public abstract class Task {
         }
     }
 
+    public String dataString() {
+        if (this.isDone) {
+            return "1|" + this.description;
+        } else {
+            return "0|" + this.description;
+        }
+    }
+
 }

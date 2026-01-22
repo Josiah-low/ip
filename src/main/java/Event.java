@@ -14,4 +14,8 @@ public class Event extends Task {
         return "[E]" + super.toString() + " (from: " + start + " to: " + end + ")";
     }
 
+    @Override
+    public String dataString() {
+        return "E" +  super.dataString() + "|" + this.start + "|" + this.end;
+    }
 }
