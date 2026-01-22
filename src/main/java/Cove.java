@@ -17,11 +17,7 @@ public class Cove {
         // for save
         File data = new File("./data/cove.txt");
         try {
-            if (data.createNewFile()) {
-                System.out.println("Data file created");
-            } else {
-                System.out.println("Data file already exists");
-            }
+            data.createNewFile();
         } catch (IOException e) {
             System.out.println("Something went wrong: " + e.getMessage());
         }
@@ -104,7 +100,8 @@ public class Cove {
 
     public static void markTaskAsDone(int taskIndex) {
         Task task = tasks.get(taskIndex - 1);
-        task.markAsDone();
+        task.setDone(true);
+        saveTasks();
         System.out.println(" Nice! I've marked this task as done:");
         System.out.println(" " + task.toString());
         printLongLine();
@@ -113,7 +110,8 @@ public class Cove {
 
     public static void unmarkTaskAsDone(int taskIndex) {
         Task task = tasks.get(taskIndex - 1);
-        task.markAsNotDone();
+        task.setDone(false);
+        saveTasks();
         System.out.println(" OK, I've marked this task as not done yet:");
         System.out.println(" " + task.toString());
         printLongLine();
@@ -202,6 +200,7 @@ public class Cove {
             throw new CoveException("OOPS! The description of a todo cannot be empty.");
         }
         tasks.add(new ToDo(description));
+        saveTasks();
         printTaskAdded();
     }
 
@@ -219,6 +218,7 @@ public class Cove {
             throw new CoveException("OOPS! You didn't specify the deadline.");
         }
         tasks.add(new Deadline(description, by));
+        saveTasks();
         printTaskAdded();
     }
 
@@ -241,6 +241,7 @@ public class Cove {
             throw new CoveException("OOPS! You didn't provide a end date/time.");
         }
         tasks.add(new Event(description, start, end));
+        saveTasks();
         printTaskAdded();
     }
 
@@ -260,12 +261,43 @@ public class Cove {
             throw new CoveException("OOPS! The task number you provided is invalid.");
         }
         deleteTask(taskIndex);
+        saveTasks();
     }
 
-    private static void appendToFile(String filePath, String text) throws IOException {
-        FileWriter fileWriter = new FileWriter(filePath, true);
-        fileWriter.write(text);
-        fileWriter.close();
+    // Loading And Saving
+
+    private static void loadTask(String dataString) throws CoveException {
+        switch (dataString.charAt(0)) {
+            case 'T': {
+                String description = dataString.split("\\|", 2)[1];
+                Task taskToLoad = new ToDo(description);
+                if (dataString.charAt(1) == '1') taskToLoad.setDone(true);
+                tasks.add(taskToLoad);
+                break;
+            }
+            case 'D': {
+                String[] words = dataString.split("\\|", 3);
+                String description = words[1];
+                String by = words[2];
+                Task taskToLoad = new Deadline(description, by);
+                if (dataString.charAt(1) == '1') taskToLoad.setDone(true);
+                tasks.add(taskToLoad);
+                break;
+            }
+            case 'E': {
+                String[] words = dataString.split("\\|", 4);
+                String description = words[1];
+                String start = words[2];
+                String end = words[3];
+                Task taskToLoad = new Event(description, start, end);
+                if (dataString.charAt(1) == '1') taskToLoad.setDone(true);
+                tasks.add(taskToLoad);
+                break;
+            }
+            default: {
+                throw new CoveException("Error loading tasks");
+            }
+        }
     }
 
     private static void loadTasks() {
@@ -285,37 +317,20 @@ public class Cove {
         }
     }
 
-    private static void loadTask(String dataString) throws CoveException {
-        switch(dataString.charAt(0)) {
-            case 'T': {
-                String description = dataString.split("\\|", 2)[1];
-                Task taskToLoad = new ToDo(description);
-                if (dataString.charAt(1) == '1') taskToLoad.markAsDone();
-                tasks.add(taskToLoad);
-                break;
+    private static void appendToFile(String filePath, String text) throws IOException {
+        FileWriter fileWriter = new FileWriter(filePath, true);
+        fileWriter.write(text);
+        fileWriter.close();
+    }
+
+    private static void saveTasks() {
+        try {
+            Files.delete(Paths.get("./data/cove.txt"));
+            for (Task task : tasks) {
+                appendToFile("./data/cove.txt", task.dataString() + "\n");
             }
-            case 'D': {
-                String[] words = dataString.split("\\|", 3);
-                String description = words[1];
-                String by = words[2];
-                Task taskToLoad = new Deadline(description, by);
-                if (dataString.charAt(1) == '1') taskToLoad.markAsDone();
-                tasks.add(taskToLoad);
-                break;
-            }
-            case 'E': {
-                String[] words = dataString.split("\\|", 4);
-                String description = words[1];
-                String start = words[2];
-                String end = words[3];
-                Task taskToLoad = new Event(description, start, end);
-                if (dataString.charAt(1) == '1') taskToLoad.markAsDone();
-                tasks.add(taskToLoad);
-                break;
-            }
-            default: {
-                throw new CoveException("Error loading tasks");
-            }
+        } catch (IOException e) {
+            System.out.println("Something went wrong: " + e.getMessage());
         }
     }
 

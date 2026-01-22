@@ -10,16 +10,12 @@ public abstract class Task {
         return this.description;
     }
 
-    public boolean getIsDone() {
+    public boolean IsDone() {
         return this.isDone;
     }
 
-    public void markAsDone() {
-        this.isDone = true;
-    }
-
-    public void markAsNotDone() {
-        this.isDone = false;
+    public void setDone(boolean isDone) {
+        this.isDone = isDone;
     }
 
     @Override
