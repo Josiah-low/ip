@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Represents a task with a start and end date/time.
@@ -34,7 +35,8 @@ public class Event extends Task {
      */
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " (from: " + start + " to: " + end + ")";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy");
+        return "[E]" + super.toString() + " (from: " + start.format(formatter) + " to: " + end.format(formatter) + ")";
     }
 
     /**
@@ -44,6 +46,6 @@ public class Event extends Task {
      */
     @Override
     public String dataString() {
-        return "E" +  super.dataString() + "|" + this.start + "|" + this.end;
+        return "E" +  super.dataString() + "|" + this.start + "|" + this.end.toString();
     }
 }

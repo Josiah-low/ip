@@ -1,0 +1,4 @@
+T0|aoidh
+D1|hello|2026-12-01
+D0|homework|2026-01-24
+E1|Birthday party|2026-01-25|2026-01-25

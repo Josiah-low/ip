@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Represents a task with a deadline.
@@ -28,7 +29,8 @@ public class Deadline extends Task {
      */
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + this.by + ")";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy");
+        return "[D]" + super.toString() + " (by: " + this.by.format(formatter) + ")";
     }
 
     /**
@@ -38,6 +40,6 @@ public class Deadline extends Task {
      */
     @Override
     public String dataString() {
-        return "D" +  super.dataString() + "|" + this.by;
+        return "D" +  super.dataString() + "|" + this.by.toString();
     }
 }
