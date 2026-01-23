@@ -88,6 +88,8 @@ public class Storage {
      * Returns an array list of tasks as specified by the data file.
      * Reads line by line from the data file for a task data string,
      * and adds them to the tasks array list before returning it.
+     *
+     * @return The Task array list containing tasks from the data file
      */
     public ArrayList<Task> load() {
         ArrayList<Task> tasks = new ArrayList<Task>();

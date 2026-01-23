@@ -23,44 +23,45 @@ public class Cove {
             try {
                 String userInput = ui.readUserInput();
                 ui.printLongLine();
-                String command = userInput.split(" ")[0];
+                String command = Parser.parseCommand(userInput);
+                String arguments = Parser.parseArguments(userInput);
 
                 switch (command) {
                 case "bye":
-                    handleBye(userInput);
+                    handleBye(arguments);
                     return;
 
                 case "list":
-                    handleList(userInput);
+                    handleList(arguments);
                     break;
 
                 case "mark": {
-                    handleMark(userInput);
+                    handleMark(arguments);
                     break;
                 }
 
                 case "unmark": {
-                    handleUnmark(userInput);
+                    handleUnmark(arguments);
                     break;
                 }
 
                 case "todo": {
-                    handleTodo(userInput);
+                    handleTodo(arguments);
                     break;
                 }
 
                 case "deadline": {
-                    handleDeadline(userInput);
+                    handleDeadline(arguments);
                     break;
                 }
 
                 case "event": {
-                    handleEvent(userInput);
+                    handleEvent(arguments);
                     break;
                 }
 
                 case "delete": {
-                    handleDelete(userInput);
+                    handleDelete(arguments);
                     break;
                 }
 
@@ -77,19 +78,20 @@ public class Cove {
 
     }
 
-    // Command Handling Helper Methods
+    // Command handling helper methods
 
     /**
      * Handles the bye command to exit the application.
      * Ensures that the bye command entered has no extra parameters, then prints the exit message to the console.
      *
-     * @param userInput Complete userInput string entered into the console.
+     * @param arguments Only the arguments part of the userInput string entered into the console.
      * @throws CoveException if the userInput contains anything other than "bye".
      */
-    public static void handleBye(String userInput) throws CoveException {
-        if (!userInput.trim().equals("bye")) {
+    public static void handleBye(String arguments) throws CoveException {
+        if (!arguments.equals("bye")) {
             throw new CoveException("OOPS! 'bye' command does not accept any parameters.");
         }
+
         ui.printExit();
     }
 
@@ -97,13 +99,14 @@ public class Cove {
      * Handles the list command to display task list.
      * Ensures that the list command entered has no extra parameters, then prints the task list to the console.
      *
-     * @param userInput Complete userInput string entered into the console.
+     * @param arguments Only the arguments part of the userInput string entered into the console.
      * @throws CoveException if the userInput contains anything other than "list".
      */
-    public static void handleList(String userInput) throws CoveException {
-        if (!userInput.trim().equals("list")) {
+    public static void handleList(String arguments) throws CoveException {
+        if (!arguments.isEmpty()) {
             throw new CoveException("OOPS! 'list' command does not accept any parameters.");
         }
+
         ui.printTaskList(tasks);
     }
 
@@ -112,24 +115,33 @@ public class Cove {
      * Ensures that the mark command entered has only one parameter (a valid task number),
      * and marks the specified task as done.
      *
-     * @param userInput Complete userInput string entered into the console.
+     * @param arguments Only the arguments part of the userInput string entered into the console.
      * @throws CoveException if a task number is not specified or is invalid, or more than 1 parameter is provided.
+     * @throws NumberFormatException if the argument provided is not a valid integer.
      */
-    public static void handleMark(String userInput) throws CoveException {
-        String[] words = userInput.split(" ");
-        if (words.length < 2) {
+    public static void handleMark(String arguments) throws CoveException {
+        if (arguments.isEmpty()) {
             throw new CoveException("OOPS! You didn't specify a task number to mark.");
-        } else if (words.length > 2) {
-            throw new CoveException("OOPS! 'mark' command only accepts 1 parameter.");
-        }
-        int taskIndex = Integer.parseInt(words[1]);
-        if (taskIndex < 1 || taskIndex > tasks.size()) {
-            throw new CoveException("OOPS! The task number you provided is invalid.");
         }
 
-        Task task = tasks.markTask(taskIndex);
-        storage.save(tasks);
-        ui.printTaskMarked(task);
+        if (arguments.contains(" ")) {
+            throw new CoveException("OOPS! 'mark' command only accepts 1 parameter.");
+        }
+
+        try {
+            int taskIndex = Integer.parseInt(arguments);
+
+            if (taskIndex < 1 || taskIndex > tasks.size()) {
+                throw new CoveException("OOPS! The task number you provided is invalid.");
+            }
+
+            Task task = tasks.markTask(taskIndex);
+            storage.save(tasks);
+            ui.printTaskMarked(task);
+
+        } catch (NumberFormatException e) {
+            throw new CoveException("OOPS! Task index must be a valid integer.");
+        }
     }
 
     /**
@@ -137,24 +149,33 @@ public class Cove {
      * Ensures that the mark command entered has only one parameter (a valid task number),
      * and marks the specified task as not done.
      *
-     * @param userInput Complete userInput string entered into the console.
+     * @param arguments Only the arguments part of the userInput string entered into the console.
      * @throws CoveException if a task number is not specified or is invalid, or more than 1 parameter is provided.
+     * @throws NumberFormatException if the argument provided is not a valid integer.
      */
-    public static void handleUnmark(String userInput) throws CoveException {
-        String[] words = userInput.split(" ");
-        if (words.length < 2) {
-            throw new CoveException("OOPS! You didn't specify a task number to unmark as done.");
-        } else if (words.length > 2) {
-            throw new CoveException("OOPS! 'unmark' command only accepts 1 parameter.");
-        }
-        int taskIndex = Integer.parseInt(words[1]);
-        if (taskIndex < 1 || taskIndex > tasks.size()) {
-            throw new CoveException("OOPS! The task number you provided is invalid.");
+    public static void handleUnmark(String arguments) throws CoveException {
+        if (arguments.isEmpty()) {
+            throw new CoveException("OOPS! You didn't specify a task number to mark.");
         }
 
-        Task task = tasks.unmarkTask(taskIndex);
-        storage.save(tasks);
-        ui.printTaskUnmarked(task);
+        if (arguments.contains(" ")) {
+            throw new CoveException("OOPS! 'mark' command only accepts 1 parameter.");
+        }
+
+        try {
+            int taskIndex = Integer.parseInt(arguments);
+
+            if (taskIndex < 1 || taskIndex > tasks.size()) {
+                throw new CoveException("OOPS! The task number you provided is invalid.");
+            }
+
+            Task task = tasks.unmarkTask(taskIndex);
+            storage.save(tasks);
+            ui.printTaskUnmarked(task);
+
+        } catch (NumberFormatException e) {
+            throw new CoveException("OOPS! Task index must be a valid integer.");
+        }
     }
 
     /**
@@ -162,14 +183,16 @@ public class Cove {
      * Obtains the task description from the user input, ensures that it is not empty,
      * creates a new ToDo task, adds it to the task list, and saves the updated list.
      *
-     * @param userInput Complete userInput string entered into the console.
+     * @param arguments Only the arguments part of the userInput string entered into the console.
      * @throws CoveException if the task description is empty.
      */
-    public static void handleTodo(String userInput) throws CoveException {
-        String description = userInput.split("todo", 2)[1].trim();
+    public static void handleTodo(String arguments) throws CoveException {
+        String description = arguments;
+
         if (description.isEmpty()) {
             throw new CoveException("OOPS! The description of a todo cannot be empty.");
         }
+
         tasks.addTask(new ToDo(description));
         storage.save(tasks);
         ui.printTaskAdded(tasks.getTask(tasks.size()), tasks.size());
@@ -181,19 +204,20 @@ public class Cove {
      * ensures the date format entered is valid, then creates a new Deadline task,
      * adds it to the task list, and saves the updated list.
      *
-     * @param userInput Complete userInput string entered into the console.
+     * @param arguments Only the arguments part of the userInput string entered into the console.
      * @throws CoveException if the task description or deadline is empty, or no /by separator is used.
      */
-    public static void handleDeadline(String userInput) throws CoveException {
-        String description = userInput.split("deadline", 2)[1];
-        if (!userInput.contains("/by")) {
+    public static void handleDeadline(String arguments) throws CoveException {
+        if (!arguments.contains("/by")) {
             throw new CoveException("OOPS! Please specify a deadline with /by.");
         }
-        description = description.split("/by", 2)[0].trim();
+
+        String description = arguments.split("/by", 2)[0].trim();
         if (description.isEmpty()) {
             throw new CoveException("OOPS! The description of a deadline cannot be empty.");
         }
-        String by = userInput.split("/by", 2)[1].trim();
+
+        String by = arguments.split("/by", 2)[1].trim();
         if (by.isEmpty()) {
             throw new CoveException("OOPS! You didn't specify the deadline.");
         }
@@ -201,6 +225,7 @@ public class Cove {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
             tasks.addTask(new Deadline(description, LocalDate.parse(by, formatter)));
+
         } catch (DateTimeParseException e) {
             throw new CoveException("OOPS! Invalid date format! Your dates must be in the format of \"yyyy/mm/dd\".");
         }
@@ -215,24 +240,26 @@ public class Cove {
      * ensures that they are not empty, ensures the date formats entered are valid,
      * then creates a new Event task, adds it to the task list, and saves the updated list.
      *
-     * @param userInput Complete userInput string entered into the console.
+     * @param arguments Only the arguments part of the userInput string entered into the console.
      * @throws CoveException if the task description, start, or end is empty, or no /from or /to separator is used.
      */
-    public static void handleEvent(String userInput) throws CoveException {
-        String description = userInput.split("event", 2)[1];
-        if (!userInput.contains("/from") || !userInput.contains("/to")) {
+    public static void handleEvent(String arguments) throws CoveException {
+        if (!arguments.contains("/from") || !arguments.contains("/to")) {
             throw new CoveException("OOPS! Please specify a start date/time with /from and an end date/time with /to.");
         }
-        description = description.split("/from", 2)[0].trim();
+
+        String description = arguments.split("/from", 2)[0].trim();
         if (description.isEmpty()) {
             throw new CoveException("OOPS! The description of an event cannot be empty.");
         }
-        String start = userInput.split("/from")[1];
+
+        String start = arguments.split("/from")[1];
         start = start.split("/to", 2)[0].trim();
         if (start.isEmpty()) {
             throw new CoveException("OOPS! You didn't provide a start date/time.");
         }
-        String end = userInput.split("/to", 2)[1].trim();
+
+        String end = arguments.split("/to", 2)[1].trim();
         if (end.isEmpty()) {
             throw new CoveException("OOPS! You didn't provide a end date/time.");
         }
@@ -241,6 +268,7 @@ public class Cove {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
             tasks.addTask(new Event(description, LocalDate.parse(start, formatter),
                     LocalDate.parse(end, formatter)));
+
         } catch (DateTimeParseException e) {
             throw new CoveException("OOPS! Invalid date format! Your dates must be in the format of \"yyyy/mm/dd\".");
         }
@@ -264,24 +292,31 @@ public class Cove {
      * Ensures that the delete command entered has only one parameter (a valid task number),
      * and deletes the task from the task list.
      *
-     * @param userInput Complete userInput string entered into the console.
+     * @param arguments Only the arguments part of the userInput string entered into the console.
      * @throws CoveException if a task number is not specified or is invalid, or more than 1 parameter is provided.
      */
-    public static void handleDelete(String userInput) throws CoveException {
-        String[] words = userInput.split(" ");
-        if (words.length < 2) {
+    public static void handleDelete(String arguments) throws CoveException {
+        if (arguments.isEmpty()) {
             throw new CoveException("OOPS! You didn't specify a task number to delete.");
-        } else if (words.length > 2) {
+        }
+
+        if (arguments.contains(" ")) {
             throw new CoveException("OOPS! 'delete' command only accepts 1 parameter.");
         }
-        int taskIndex = Integer.parseInt(words[1]);
-        if (taskIndex < 1 || taskIndex > tasks.size()) {
-            throw new CoveException("OOPS! The task number you provided is invalid.");
+
+        try {
+            int taskIndex = Integer.parseInt(arguments);
+
+            if (taskIndex < 1 || taskIndex > tasks.size()) {
+                throw new CoveException("OOPS! The task number you provided is invalid.");
+            }
+
+            Task task = tasks.deleteTask(taskIndex);
+            ui.printTaskDeleted(task, tasks.size());
+            storage.save(tasks);
+
+        } catch (NumberFormatException e) {
+            throw new CoveException("OOPS! Task index must be a valid integer.");
         }
-
-        Task task = tasks.deleteTask(taskIndex);
-        ui.printTaskDeleted(task, tasks.size());
-
-        storage.save(tasks);
     }
 }
