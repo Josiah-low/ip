@@ -3,6 +3,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -293,8 +296,9 @@ public class Cove {
 
     /**
      * Handles the deadline command to create a new Deadline task.
-     * Obtains the task description and deadline from the user input, ensure that they are not empty,
-     * creates a new Deadline task, adds it to the task list, and saves the updated list.
+     * Obtains the task description and deadline date from the user input, ensures that they are not empty,
+     * ensures the date format entered is valid, then creates a new Deadline task,
+     * adds it to the task list, and saves the updated list.
      *
      * @param userInput Complete userInput string entered into the console.
      * @throws CoveException if the task description or deadline is empty, or no /by separator is used.
@@ -312,15 +316,23 @@ public class Cove {
         if (by.isEmpty()) {
             throw new CoveException("OOPS! You didn't specify the deadline.");
         }
-        tasks.add(new Deadline(description, by));
+
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+            tasks.add(new Deadline(description, LocalDate.parse(by, formatter)));
+        } catch (DateTimeParseException e) {
+            throw new CoveException("OOPS! Invalid date format! Your dates must be in the format of \"yyyy/mm/dd\".");
+        }
+
         saveTasks();
         printTaskAdded();
     }
 
     /**
      * Handles the event command to create a new Event task.
-     * Obtains the task description, start, and end from the user input, ensure that they are not empty,
-     * creates a new Event task, adds it to the task list, and saves the updated list.
+     * Obtains the task description, start date, and end date from the user input,
+     * ensures that they are not empty, ensures the date formats entered are valid,
+     * then creates a new Event task, adds it to the task list, and saves the updated list.
      *
      * @param userInput Complete userInput string entered into the console.
      * @throws CoveException if the task description, start, or end is empty, or no /from or /to separator is used.
@@ -343,7 +355,15 @@ public class Cove {
         if (end.isEmpty()) {
             throw new CoveException("OOPS! You didn't provide a end date/time.");
         }
-        tasks.add(new Event(description, start, end));
+
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+            tasks.add(new Event(description, LocalDate.parse(start, formatter),
+                    LocalDate.parse(end, formatter)));
+        } catch (DateTimeParseException e) {
+            throw new CoveException("OOPS! Invalid date format! Your dates must be in the format of \"yyyy/mm/dd\".");
+        }
+
         saveTasks();
         printTaskAdded();
     }
@@ -394,42 +414,48 @@ public class Cove {
      * @throws CoveException if the task type is unrecognised or the data format is invalid.
      */
     private static void loadTask(String dataString) throws CoveException {
-        switch (dataString.charAt(0)) {
-        case 'T': {
-            String description = dataString.split("\\|", 2)[1];
-            Task taskToLoad = new ToDo(description);
-            if (dataString.charAt(1) == '1') {
-                taskToLoad.setDone(true);
+        try {
+            switch (dataString.charAt(0)) {
+            case 'T': {
+                String description = dataString.split("\\|", 2)[1];
+                Task taskToLoad = new ToDo(description);
+                if (dataString.charAt(1) == '1') {
+                    taskToLoad.setDone(true);
+                }
+                tasks.add(taskToLoad);
+                break;
             }
-            tasks.add(taskToLoad);
-            break;
-        }
-        case 'D': {
-            String[] words = dataString.split("\\|", 3);
-            String description = words[1];
-            String by = words[2];
-            Task taskToLoad = new Deadline(description, by);
-            if (dataString.charAt(1) == '1') {
-                taskToLoad.setDone(true);
+            case 'D': {
+                String[] words = dataString.split("\\|", 3);
+                String description = words[1];
+                String by = words[2];
+
+                Task taskToLoad = new Deadline(description, LocalDate.parse(by));
+                if (dataString.charAt(1) == '1') {
+                    taskToLoad.setDone(true);
+                }
+                tasks.add(taskToLoad);
+                break;
             }
-            tasks.add(taskToLoad);
-            break;
-        }
-        case 'E': {
-            String[] words = dataString.split("\\|", 4);
-            String description = words[1];
-            String start = words[2];
-            String end = words[3];
-            Task taskToLoad = new Event(description, start, end);
-            if (dataString.charAt(1) == '1') {
-                taskToLoad.setDone(true);
+            case 'E': {
+                String[] words = dataString.split("\\|", 4);
+                String description = words[1];
+                String start = words[2];
+                String end = words[3];
+
+                Task taskToLoad = new Event(description, LocalDate.parse(start), LocalDate.parse(end));
+                if (dataString.charAt(1) == '1') {
+                    taskToLoad.setDone(true);
+                }
+                tasks.add(taskToLoad);
+                break;
             }
-            tasks.add(taskToLoad);
-            break;
-        }
-        default: {
-            throw new CoveException("Unrecognised task type.");
-        }
+            default: {
+                throw new CoveException("Error: Unrecognised task type in save file.");
+            }
+            }
+        } catch (DateTimeParseException e) {
+            throw new CoveException("Error: Corrupted date in save file.");
         }
     }
 
