@@ -35,9 +35,10 @@ public class Cove {
                     handleBye(arguments);
                     return;
 
-                case "list":
+                case "list": {
                     handleList(arguments);
                     break;
+                }
 
                 case "mark": {
                     handleMark(arguments);
@@ -95,7 +96,7 @@ public class Cove {
      * @throws CoveException if the userInput contains anything other than "bye".
      */
     public void handleBye(String arguments) throws CoveException {
-        if (!arguments.equals("bye")) {
+        if (!arguments.isEmpty()) {
             throw new CoveException("OOPS! 'bye' command does not accept any parameters.");
         }
 
