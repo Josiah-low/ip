@@ -3,9 +3,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.time.LocalDate;
 
 /**
  * Main entry point for Cove chatbot.
@@ -314,12 +316,13 @@ public class Cove {
             throw new CoveException("OOPS! You didn't specify the deadline.");
         }
 
-        String[] date = by.split("/", 3); // yyyy-mm-dd
-        int yyyy = Integer.parseInt(date[0]);
-        int mm = Integer.parseInt(date[1]);
-        int dd = Integer.parseInt(date[2]);
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+            tasks.add(new Deadline(description, LocalDate.parse(by, formatter)));
+        } catch (DateTimeParseException e) {
+            throw new CoveException("OOPS! Invalid date format! Your dates must be in the format of \"yyyy/mm/dd\".");
+        }
 
-        tasks.add(new Deadline(description, LocalDate.of(yyyy, mm, dd)));
         saveTasks();
         printTaskAdded();
     }
@@ -352,18 +355,14 @@ public class Cove {
             throw new CoveException("OOPS! You didn't provide a end date/time.");
         }
 
-        String[] startDate = start.split("/", 3); // yyyy-mm-dd
-        int startYyyy = Integer.parseInt(startDate[0]);
-        int startMm = Integer.parseInt(startDate[1]);
-        int startDd = Integer.parseInt(startDate[2]);
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+            tasks.add(new Event(description, LocalDate.parse(start, formatter),
+                    LocalDate.parse(end, formatter)));
+        } catch (DateTimeParseException e) {
+            throw new CoveException("OOPS! Invalid date format! Your dates must be in the format of \"yyyy/mm/dd\".");
+        }
 
-        String[] endDate = end.split("/", 3); // yyyy-mm-dd
-        int endYyyy = Integer.parseInt(endDate[0]);
-        int endMm = Integer.parseInt(endDate[1]);
-        int endDd = Integer.parseInt(endDate[2]);
-
-        tasks.add(new Event(description, LocalDate.of(startYyyy, startMm, startDd),
-                LocalDate.of(endYyyy, endMm, endDd)));
         saveTasks();
         printTaskAdded();
     }
@@ -429,12 +428,7 @@ public class Cove {
             String description = words[1];
             String by = words[2];
 
-            String[] date = by.split("-");
-            int yyyy = Integer.parseInt(date[0]);
-            int mm = Integer.parseInt(date[1]);
-            int dd = Integer.parseInt(date[2]);
-
-            Task taskToLoad = new Deadline(description, LocalDate.of(yyyy, mm, dd));
+            Task taskToLoad = new Deadline(description, LocalDate.parse(by));
             if (dataString.charAt(1) == '1') {
                 taskToLoad.setDone(true);
             }
@@ -447,18 +441,7 @@ public class Cove {
             String start = words[2];
             String end = words[3];
 
-            String[] startDate = start.split("/", 3); // yyyy-mm-dd
-            int startYyyy = Integer.parseInt(startDate[0]);
-            int startMm = Integer.parseInt(startDate[1]);
-            int startDd = Integer.parseInt(startDate[2]);
-
-            String[] endDate = end.split("/", 3); // yyyy-mm-dd
-            int endYyyy = Integer.parseInt(endDate[0]);
-            int endMm = Integer.parseInt(endDate[1]);
-            int endDd = Integer.parseInt(endDate[2]);
-
-            Task taskToLoad = new Event(description, LocalDate.of(startYyyy, startMm, startDd),
-                    LocalDate.of(endYyyy, endMm, endDd));
+            Task taskToLoad = new Event(description, LocalDate.parse(start), LocalDate.parse(end));
             if (dataString.charAt(1) == '1') {
                 taskToLoad.setDone(true);
             }
