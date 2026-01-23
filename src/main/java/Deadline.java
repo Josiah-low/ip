@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+
 /**
  * Represents a task with a deadline.
  * A deadline task includes a description and a
@@ -6,7 +8,7 @@
 public class Deadline extends Task {
 
     /** Date/time by which task should be completed */
-    private String by;
+    private LocalDate by;
 
     /**
      * Creates a new Deadline task with the specified description and by deadline.
@@ -14,7 +16,7 @@ public class Deadline extends Task {
      * @param description The description of the task.
      * @param by The deadline date/time for completing the task.
      */
-    public Deadline(String description, String by) {
+    public Deadline(String description, LocalDate by) {
         super(description);
         this.by = by;
     }
