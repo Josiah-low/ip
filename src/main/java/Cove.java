@@ -296,8 +296,9 @@ public class Cove {
 
     /**
      * Handles the deadline command to create a new Deadline task.
-     * Obtains the task description and deadline from the user input, ensure that they are not empty,
-     * creates a new Deadline task, adds it to the task list, and saves the updated list.
+     * Obtains the task description and deadline date from the user input, ensures that they are not empty,
+     * ensures the date format entered is valid, then creates a new Deadline task,
+     * adds it to the task list, and saves the updated list.
      *
      * @param userInput Complete userInput string entered into the console.
      * @throws CoveException if the task description or deadline is empty, or no /by separator is used.
@@ -329,8 +330,9 @@ public class Cove {
 
     /**
      * Handles the event command to create a new Event task.
-     * Obtains the task description, start, and end from the user input, ensure that they are not empty,
-     * creates a new Event task, adds it to the task list, and saves the updated list.
+     * Obtains the task description, start date, and end date from the user input,
+     * ensures that they are not empty, ensures the date formats entered are valid,
+     * then creates a new Event task, adds it to the task list, and saves the updated list.
      *
      * @param userInput Complete userInput string entered into the console.
      * @throws CoveException if the task description, start, or end is empty, or no /from or /to separator is used.
@@ -483,7 +485,7 @@ public class Cove {
      * Appends text to a file at the specified path.
      *
      * @param filePath Path to the file to append the text to.
-     * @param text     Text to append to the file.
+     * @param text Text to append to the file.
      * @throws IOException if an I/O error occurs.
      */
     private static void appendToFile(String filePath, String text) throws IOException {

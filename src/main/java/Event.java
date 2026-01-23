@@ -2,20 +2,19 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Represents a task with a start and end date/time.
- * An Event task includes a description and a
- * start date/time at which the task begins,
- * and an end date/time at which the task ends.
+ * Represents a task with a start and end date.
+ * An Event task includes a description and a start date on which the task begins,
+ * and an end date on which the task ends.
  */
 public class Event extends Task {
 
-    /** Date/time at which the task begins */
+    /** Date on which the task begins */
     private LocalDate start;
-    /** Date/time at which the task ends */
+    /** Date on which the task ends */
     private LocalDate end;
 
     /**
-     * Creates a new Event task with the specified description and by deadline.
+     * Creates a new Event task with the specified description, start and end dates.
      *
      * @param description The description of the task.
      * @param start The date/time at which the task begins.
@@ -29,9 +28,9 @@ public class Event extends Task {
 
     /**
      * Returns a string representation of an Event task for printing to console.
-     * The format is: "[E][isDone] description (from: start to: end)" where start and end
-     * are the start date/time and end date/time respectively, and isDone is "X"
-     * if true, or a space if false.
+     * The format is: "[E][isDone] description (from: start to: end)"
+     * where start and end are the start date and end date respectively, in the format
+     * MMM dd yyyy, and isDone is "X" if true, or a space if false.
      */
     @Override
     public String toString() {
@@ -42,7 +41,7 @@ public class Event extends Task {
     /**
      * Returns a string representation of an Event task for saving to the data file.
      * The format is: "EX|description|start|end" where X is "1" if true,
-     * or "0" if false.
+     * or "0" if false. start and end are in the format yyyy-MM-dd.
      */
     @Override
     public String dataString() {
