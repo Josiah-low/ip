@@ -93,44 +93,6 @@ public class Cove {
 
     }
 
-    /**
-     * Marks task as not done and saves the updated task list.
-     * Obtains the task at the user specified index to set its isDone status to true,
-     * updates the changes to the data file, and prints a confirmation to the console.
-     *
-     * @param taskIndex index of the task to mark as done.
-     */
-    public static void markTaskAsDone(int taskIndex) {
-        Task task = tasks.markTask(taskIndex);
-        saveTasks();
-        ui.printTaskMarked(task);
-    }
-
-    /**
-     * Marks task as not done and saves the updated task list.
-     * Obtains the task at the user specified index to set its isDone status to false,
-     * updates the changes to the data file, and prints a confirmation to the console.
-     *
-     * @param taskIndex index of the task to mark as done.
-     */
-    public static void unmarkTaskAsDone(int taskIndex) {
-        Task task = tasks.unmarkTask(taskIndex);
-        saveTasks();
-        ui.printTaskUnmarked(task);
-    }
-
-    /**
-     * Deletes task and saves the updated task list.
-     * Removes the task at the user specified index from the tasks ArrayList,
-     * updates the changes to the data file, and prints a confirmation to the console.
-     *
-     * @param taskIndex index of the task to delete.
-     */
-    public static void deleteTask(int taskIndex) {
-        Task task = tasks.deleteTask(taskIndex);
-        ui.printTaskDeleted(task, tasks.size());
-    }
-
     // Command Handling Helper Methods
 
     /**
@@ -180,7 +142,10 @@ public class Cove {
         if (taskIndex < 1 || taskIndex > tasks.size()) {
             throw new CoveException("OOPS! The task number you provided is invalid.");
         }
-        markTaskAsDone(taskIndex);
+
+        Task task = tasks.markTask(taskIndex);
+        saveTasks();
+        ui.printTaskMarked(task);
     }
 
     /**
@@ -202,7 +167,10 @@ public class Cove {
         if (taskIndex < 1 || taskIndex > tasks.size()) {
             throw new CoveException("OOPS! The task number you provided is invalid.");
         }
-        unmarkTaskAsDone(taskIndex);
+
+        Task task = tasks.unmarkTask(taskIndex);
+        saveTasks();
+        ui.printTaskUnmarked(task);
     }
 
     /**
@@ -326,7 +294,10 @@ public class Cove {
         if (taskIndex < 1 || taskIndex > tasks.size()) {
             throw new CoveException("OOPS! The task number you provided is invalid.");
         }
-        deleteTask(taskIndex);
+
+        Task task = tasks.deleteTask(taskIndex);
+        ui.printTaskDeleted(task, tasks.size());
+
         saveTasks();
     }
 
