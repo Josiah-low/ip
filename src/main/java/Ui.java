@@ -1,11 +1,14 @@
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Ui {
 
+    /** Scanner to read user input */
     private Scanner scanner;
 
+    /**
+     * Creates a new Ui for console printing and reading functionality.
+     */
     public Ui() {
         this.scanner = new Scanner(System.in);
     }
@@ -117,6 +120,11 @@ public class Ui {
         System.out.println();
     }
 
+    /**
+     * Reads the user's input to the console.
+     *
+     * @return The string containing the user's input to the console.
+     */
     public String readUserInput() {
         return scanner.nextLine();
     }

@@ -18,6 +18,7 @@ public class Cove {
 
     private static ArrayList<Task> tasks = new ArrayList<Task>();
     public static Ui ui = new Ui();
+    // private TaskList tasks;
 
     public static void main(String[] args) {
         // Initialise scanner and greet user
@@ -121,15 +122,6 @@ public class Cove {
     }
 
     /**
-     * Prints the user's task list to the console.
-     * Prints information about each task's task type, isDone status, description,
-     * deadline (for Deadline tasks), start and end (for Event tasks).
-     */
-    public static void printTaskList() {
-        ui.printTaskList(tasks);
-    }
-
-    /**
      * Deletes task and saves the updated task list.
      * Removes the task at the user specified index from the tasks ArrayList,
      * updates the changes to the data file, and prints a confirmation to the console.
@@ -168,7 +160,7 @@ public class Cove {
         if (!userInput.trim().equals("list")) {
             throw new CoveException("OOPS! 'list' command does not accept any parameters.");
         }
-        printTaskList();
+        ui.printTaskList(tasks);
     }
 
     /**
