@@ -16,6 +16,10 @@ public class TaskList {
         return this.tasks;
     }
 
+    public Task getTask(int taskIndex) {
+        return this.tasks.get(taskIndex - 1);
+    }
+
     public int size() {
         return this.tasks.size();
     }
@@ -24,16 +28,18 @@ public class TaskList {
         this.tasks.add(task);
     }
 
-    public void deleteTask(int taskIndex) {
-        this.tasks.remove(taskIndex - 1);
+    public Task deleteTask(int taskIndex) {
+        return this.tasks.remove(taskIndex - 1);
     }
 
-    public void markTask(int taskIndex) {
+    public Task markTask(int taskIndex) {
         this.tasks.get(taskIndex - 1).setDone(true);
+        return this.tasks.get(taskIndex - 1);
     }
 
-    public void unmarkTask(int taskIndex) {
+    public Task unmarkTask(int taskIndex) {
         this.tasks.get(taskIndex - 1).setDone(false);
+        return this.tasks.get(taskIndex - 1);
     }
 
 }

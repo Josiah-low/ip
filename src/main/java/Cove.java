@@ -16,13 +16,13 @@ import java.util.Scanner;
  */
 public class Cove {
 
-    private static ArrayList<Task> tasks = new ArrayList<Task>();
     public static Ui ui = new Ui();
-    // private TaskList tasks;
+    private static TaskList tasks;
 
     public static void main(String[] args) {
         // Initialise scanner and greet user
         Scanner scanner = new Scanner(System.in);
+        tasks = new TaskList();
         ui.printGreeting();
 
         // Create cove.txt file if it does not exist yet and load tasks into tasks
@@ -101,8 +101,7 @@ public class Cove {
      * @param taskIndex index of the task to mark as done.
      */
     public static void markTaskAsDone(int taskIndex) {
-        Task task = tasks.get(taskIndex - 1);
-        task.setDone(true);
+        Task task = tasks.markTask(taskIndex);
         saveTasks();
         ui.printTaskMarked(task);
     }
@@ -115,8 +114,7 @@ public class Cove {
      * @param taskIndex index of the task to mark as done.
      */
     public static void unmarkTaskAsDone(int taskIndex) {
-        Task task = tasks.get(taskIndex - 1);
-        task.setDone(false);
+        Task task = tasks.unmarkTask(taskIndex);
         saveTasks();
         ui.printTaskUnmarked(task);
     }
@@ -129,7 +127,7 @@ public class Cove {
      * @param taskIndex index of the task to delete.
      */
     public static void deleteTask(int taskIndex) {
-        Task task = tasks.remove(taskIndex - 1);
+        Task task = tasks.deleteTask(taskIndex);
         ui.printTaskDeleted(task, tasks.size());
     }
 
@@ -220,9 +218,9 @@ public class Cove {
         if (description.isEmpty()) {
             throw new CoveException("OOPS! The description of a todo cannot be empty.");
         }
-        tasks.add(new ToDo(description));
+        tasks.addTask(new ToDo(description));
         saveTasks();
-        ui.printTaskAdded(tasks.get(tasks.size() - 1), tasks.size());
+        ui.printTaskAdded(tasks.getTask(tasks.size()), tasks.size());
     }
 
     /**
@@ -250,13 +248,13 @@ public class Cove {
 
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-            tasks.add(new Deadline(description, LocalDate.parse(by, formatter)));
+            tasks.addTask(new Deadline(description, LocalDate.parse(by, formatter)));
         } catch (DateTimeParseException e) {
             throw new CoveException("OOPS! Invalid date format! Your dates must be in the format of \"yyyy/mm/dd\".");
         }
 
         saveTasks();
-        ui.printTaskAdded(tasks.get(tasks.size() - 1), tasks.size());
+        ui.printTaskAdded(tasks.getTask(tasks.size()), tasks.size());
     }
 
     /**
@@ -289,14 +287,14 @@ public class Cove {
 
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-            tasks.add(new Event(description, LocalDate.parse(start, formatter),
+            tasks.addTask(new Event(description, LocalDate.parse(start, formatter),
                     LocalDate.parse(end, formatter)));
         } catch (DateTimeParseException e) {
             throw new CoveException("OOPS! Invalid date format! Your dates must be in the format of \"yyyy/mm/dd\".");
         }
 
         saveTasks();
-        ui.printTaskAdded(tasks.get(tasks.size() - 1), tasks.size());
+        ui.printTaskAdded(tasks.getTask(tasks.size()), tasks.size());
     }
 
     /**
@@ -353,7 +351,7 @@ public class Cove {
                 if (dataString.charAt(1) == '1') {
                     taskToLoad.setDone(true);
                 }
-                tasks.add(taskToLoad);
+                tasks.addTask(taskToLoad);
                 break;
             }
             case 'D': {
@@ -365,7 +363,7 @@ public class Cove {
                 if (dataString.charAt(1) == '1') {
                     taskToLoad.setDone(true);
                 }
-                tasks.add(taskToLoad);
+                tasks.addTask(taskToLoad);
                 break;
             }
             case 'E': {
@@ -378,7 +376,7 @@ public class Cove {
                 if (dataString.charAt(1) == '1') {
                     taskToLoad.setDone(true);
                 }
-                tasks.add(taskToLoad);
+                tasks.addTask(taskToLoad);
                 break;
             }
             default: {
@@ -433,7 +431,7 @@ public class Cove {
     private static void saveTasks() {
         try {
             Files.delete(Paths.get("./data/cove.txt"));
-            for (Task task : tasks) {
+            for (Task task : tasks.getTasks()) {
                 appendToFile("./data/cove.txt", task.dataString() + "\n");
             }
         } catch (IOException e) {

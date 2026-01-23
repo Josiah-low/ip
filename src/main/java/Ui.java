@@ -46,10 +46,10 @@ public class Ui {
      *
      * @param tasks The user's task list.
      */
-    public void printTaskList(ArrayList<Task> tasks) {
+    public void printTaskList(TaskList tasks) {
         System.out.println(" Here are the tasks in your list:");
         for (int i = 1; i <= tasks.size(); i++) {
-            System.out.printf(" %d.%s\n", i, tasks.get(i - 1).toString());
+            System.out.printf(" %d.%s\n", i, tasks.getTask(i).toString());
         }
         printLongLine();
         System.out.println();
