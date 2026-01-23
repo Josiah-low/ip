@@ -1,3 +1,5 @@
+package cove;
+
 /**
  * Provides static helper methods for parsing of user input strings.
  */

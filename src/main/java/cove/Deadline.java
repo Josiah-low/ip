@@ -1,3 +1,5 @@
+package cove;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -8,11 +10,11 @@ import java.time.format.DateTimeFormatter;
  */
 public class Deadline extends Task {
 
-    /** Deadline date by which task should be completed */
+    /** cove.Deadline date by which task should be completed */
     private LocalDate by;
 
     /**
-     * Creates a new Deadline task with the specified description and deadline date.
+     * Creates a new cove.Deadline task with the specified description and deadline date.
      *
      * @param description The description of the task.
      * @param by The deadline date for completing the task.
@@ -23,7 +25,7 @@ public class Deadline extends Task {
     }
 
     /**
-     * Returns a string representation of a Deadline task for printing to console.
+     * Returns a string representation of a cove.Deadline task for printing to console.
      * The format is: "[D][isDone] description (by: MMM dd yyyy)" where isDone is "X"
      * if true, or a space if false.
      */
@@ -34,7 +36,7 @@ public class Deadline extends Task {
     }
 
     /**
-     * Returns a string representation of a Deadline task for saving to the data file.
+     * Returns a string representation of a cove.Deadline task for saving to the data file.
      * The format is: "DX|description|yyyy-MM-dd" where X is "1"
      * if true, or "0" if false.
      */

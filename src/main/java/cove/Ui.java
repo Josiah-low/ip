@@ -1,4 +1,5 @@
-import java.util.ArrayList;
+package cove;
+
 import java.util.Scanner;
 
 public class Ui {
@@ -7,7 +8,7 @@ public class Ui {
     private Scanner scanner;
 
     /**
-     * Creates a new Ui for console printing and reading functionality.
+     * Creates a new cove.Ui for console printing and reading functionality.
      */
     public Ui() {
         this.scanner = new Scanner(System.in);
@@ -21,18 +22,18 @@ public class Ui {
     }
 
     /**
-     * Prints greeting message from Cove to the console.
+     * Prints greeting message from cove.Cove to the console.
      */
     public void printGreeting() {
         printLongLine();
-        System.out.println(" Hello! I'm Cove");
+        System.out.println(" Hello! I'm cove.Cove");
         System.out.println(" What can I do for you?");
         printLongLine();
         System.out.println();
     }
 
     /**
-     * Prints exit message from Cove to the console.
+     * Prints exit message from cove.Cove to the console.
      */
     public void printExit() {
         System.out.println(" Bye. Hope to see you again soon!");
@@ -42,7 +43,7 @@ public class Ui {
     /**
      * Prints the user's task list to the console.
      * Prints information about each task's task type, isDone status, description,
-     * deadline date (for Deadline tasks), start and end dates (for Event tasks).
+     * deadline date (for cove.Deadline tasks), start and end dates (for cove.Event tasks).
      *
      * @param tasks The user's task list.
      */

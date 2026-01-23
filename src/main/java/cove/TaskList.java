@@ -1,9 +1,11 @@
+package cove;
+
 import java.util.ArrayList;
 
 /**
  * Represents a list of tasks.
  * Provides methods for adding, deleting, marking, unmarking tasks from the list.
- * Task indices are 1-indexed but handled as 0-indexed internally.
+ * cove.Task indices are 1-indexed but handled as 0-indexed internally.
  */
 public class TaskList {
 
@@ -11,16 +13,16 @@ public class TaskList {
     private ArrayList<Task> tasks;
 
     /**
-     * Creates a new TaskList with the provided ArrayList<Task>.
+     * Creates a new cove.TaskList with the provided ArrayList<cove.Task>.
      *
-     * @param tasks The Task ArrayList to initialise the TaskList with.
+     * @param tasks The cove.Task ArrayList to initialise the cove.TaskList with.
      */
     public TaskList(ArrayList<Task> tasks) {
         this.tasks = tasks;
     }
 
     /**
-     * Creates a new empty TaskList.
+     * Creates a new empty cove.TaskList.
      */
     public TaskList() {
         this.tasks = new ArrayList<Task>();

@@ -1,10 +1,12 @@
+package cove;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 /**
- * Main entry point for Cove chatbot.
- * Cove allows the user to add 3 different types of tasks to a list: ToDo, Deadline, and Event.
+ * Main entry point for cove.Cove chatbot.
+ * cove.Cove allows the user to add 3 different types of tasks to a list: cove.ToDo, cove.Deadline, and cove.Event.
  * Users can mark their tasks as done/not done, delete tasks, and view their task list.
  */
 public class Cove {
@@ -148,7 +150,7 @@ public class Cove {
             ui.printTaskMarked(task);
 
         } catch (NumberFormatException e) {
-            throw new CoveException("OOPS! Task index must be a valid integer.");
+            throw new CoveException("OOPS! cove.Task index must be a valid integer.");
         }
     }
 
@@ -182,14 +184,14 @@ public class Cove {
             ui.printTaskUnmarked(task);
 
         } catch (NumberFormatException e) {
-            throw new CoveException("OOPS! Task index must be a valid integer.");
+            throw new CoveException("OOPS! cove.Task index must be a valid integer.");
         }
     }
 
     /**
-     * Handles the todo command to create a new ToDo task.
+     * Handles the todo command to create a new cove.ToDo task.
      * Obtains the task description from the user input, ensures that it is not empty,
-     * creates a new ToDo task, adds it to the task list, and saves the updated list.
+     * creates a new cove.ToDo task, adds it to the task list, and saves the updated list.
      *
      * @param arguments Only the arguments part of the userInput string entered into the console.
      * @throws CoveException if the task description is empty.
@@ -207,9 +209,9 @@ public class Cove {
     }
 
     /**
-     * Handles the deadline command to create a new Deadline task.
+     * Handles the deadline command to create a new cove.Deadline task.
      * Obtains the task description and deadline date from the user input, ensures that they are not empty,
-     * ensures the date format entered is valid, then creates a new Deadline task,
+     * ensures the date format entered is valid, then creates a new cove.Deadline task,
      * adds it to the task list, and saves the updated list.
      *
      * @param arguments Only the arguments part of the userInput string entered into the console.
@@ -243,10 +245,10 @@ public class Cove {
     }
 
     /**
-     * Handles the event command to create a new Event task.
+     * Handles the event command to create a new cove.Event task.
      * Obtains the task description, start date, and end date from the user input,
      * ensures that they are not empty, ensures the date formats entered are valid,
-     * then creates a new Event task, adds it to the task list, and saves the updated list.
+     * then creates a new cove.Event task, adds it to the task list, and saves the updated list.
      *
      * @param arguments Only the arguments part of the userInput string entered into the console.
      * @throws CoveException if the task description, start, or end is empty, or no /from or /to separator is used.
@@ -286,16 +288,6 @@ public class Cove {
     }
 
     /**
-     * Handles unrecognised commands.
-     * Throws an exception to inform the user that the command entered is not recognised by Cove.
-     *
-     * @throws CoveException always.
-     */
-    public void handleUnknownCommand() throws CoveException {
-        throw new CoveException("OOPS! I don't understand what you mean!");
-    }
-
-    /**
      * Handles the delete command to remove a specified task from the task list.
      * Ensures that the delete command entered has only one parameter (a valid task number),
      * and deletes the task from the task list.
@@ -324,7 +316,18 @@ public class Cove {
             storage.save(tasks);
 
         } catch (NumberFormatException e) {
-            throw new CoveException("OOPS! Task index must be a valid integer.");
+            throw new CoveException("OOPS! cove.Task index must be a valid integer.");
         }
     }
+
+    /**
+     * Handles unrecognised commands.
+     * Throws an exception to inform the user that the command entered is not recognised by cove.Cove.
+     *
+     * @throws CoveException always.
+     */
+    public void handleUnknownCommand() throws CoveException {
+        throw new CoveException("OOPS! I don't understand what you mean!");
+    }
+
 }

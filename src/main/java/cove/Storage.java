@@ -1,3 +1,5 @@
+package cove;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,7 +19,7 @@ public class Storage {
     private String filePath;
 
     /**
-     * Creates a new Storage with the specified filePath.
+     * Creates a new cove.Storage with the specified filePath.
      * Creates the data file if it does not exist.
      *
      * @param filePath The path of the file to store tasks information.
@@ -89,7 +91,7 @@ public class Storage {
      * Reads line by line from the data file for a task data string,
      * and adds them to the tasks array list before returning it.
      *
-     * @return The Task array list containing tasks from the data file
+     * @return The cove.Task array list containing tasks from the data file
      */
     public ArrayList<Task> load() {
         ArrayList<Task> tasks = new ArrayList<Task>();

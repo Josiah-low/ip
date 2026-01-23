@@ -1,5 +1,7 @@
+package cove;
+
 /**
- * Represents an abstract task in Cove's task system.
+ * Represents an abstract task in cove.Cove's task system.
  * This is the base class for all task types. All tasks have a description
  * and a completion status. Subclasses must implement specific task types.
  */
@@ -10,7 +12,7 @@
     private boolean isDone;
 
     /**
-     * Creates a new Task with the specified description.
+     * Creates a new cove.Task with the specified description.
      *
      * @param description The description of the task.
      */
@@ -31,7 +33,7 @@
     }
 
     /**
-     * Returns a string representation of a Task for printing to console.
+     * Returns a string representation of a cove.Task for printing to console.
      * The format is: "[isDone] description" where isDone is "X" if true,
      * or a space if false.
      */
@@ -45,7 +47,7 @@
     }
 
     /**
-     * Returns a string representation of a Task for saving to the data file.
+     * Returns a string representation of a cove.Task for saving to the data file.
      * The format is: "X|description" where X is "1" if true, or "0" if false.
      */
     public String dataString() {
