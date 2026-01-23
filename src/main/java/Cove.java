@@ -9,13 +9,17 @@ import java.time.format.DateTimeParseException;
  */
 public class Cove {
 
-    private static Ui ui = new Ui();
-    private static Storage storage = new Storage("./data/cove.txt");
-    private static TaskList tasks;
+    private Ui ui;
+    private Storage storage;
+    private TaskList tasks;
 
-    public static void main(String[] args) {
-
+    public Cove(String filePath) {
+        ui = new Ui();
+        storage = new Storage(filePath);
         tasks = new TaskList(storage.load());
+    }
+
+    public void run() {
         ui.printGreeting();
 
         // Run main loop
@@ -75,7 +79,10 @@ public class Cove {
             }
 
         }
+    }
 
+    public static void main(String[] args) {
+        new Cove("./data/cove.txt").run();
     }
 
     // Command handling helper methods
@@ -87,7 +94,7 @@ public class Cove {
      * @param arguments Only the arguments part of the userInput string entered into the console.
      * @throws CoveException if the userInput contains anything other than "bye".
      */
-    public static void handleBye(String arguments) throws CoveException {
+    public void handleBye(String arguments) throws CoveException {
         if (!arguments.equals("bye")) {
             throw new CoveException("OOPS! 'bye' command does not accept any parameters.");
         }
@@ -102,7 +109,7 @@ public class Cove {
      * @param arguments Only the arguments part of the userInput string entered into the console.
      * @throws CoveException if the userInput contains anything other than "list".
      */
-    public static void handleList(String arguments) throws CoveException {
+    public void handleList(String arguments) throws CoveException {
         if (!arguments.isEmpty()) {
             throw new CoveException("OOPS! 'list' command does not accept any parameters.");
         }
@@ -116,10 +123,10 @@ public class Cove {
      * and marks the specified task as done.
      *
      * @param arguments Only the arguments part of the userInput string entered into the console.
-     * @throws CoveException if a task number is not specified or is invalid, or more than 1 parameter is provided.
+     * @throws CoveException         if a task number is not specified or is invalid, or more than 1 parameter is provided.
      * @throws NumberFormatException if the argument provided is not a valid integer.
      */
-    public static void handleMark(String arguments) throws CoveException {
+    public void handleMark(String arguments) throws CoveException {
         if (arguments.isEmpty()) {
             throw new CoveException("OOPS! You didn't specify a task number to mark.");
         }
@@ -150,10 +157,10 @@ public class Cove {
      * and marks the specified task as not done.
      *
      * @param arguments Only the arguments part of the userInput string entered into the console.
-     * @throws CoveException if a task number is not specified or is invalid, or more than 1 parameter is provided.
+     * @throws CoveException         if a task number is not specified or is invalid, or more than 1 parameter is provided.
      * @throws NumberFormatException if the argument provided is not a valid integer.
      */
-    public static void handleUnmark(String arguments) throws CoveException {
+    public void handleUnmark(String arguments) throws CoveException {
         if (arguments.isEmpty()) {
             throw new CoveException("OOPS! You didn't specify a task number to mark.");
         }
@@ -186,7 +193,7 @@ public class Cove {
      * @param arguments Only the arguments part of the userInput string entered into the console.
      * @throws CoveException if the task description is empty.
      */
-    public static void handleTodo(String arguments) throws CoveException {
+    public void handleTodo(String arguments) throws CoveException {
         String description = arguments;
 
         if (description.isEmpty()) {
@@ -207,7 +214,7 @@ public class Cove {
      * @param arguments Only the arguments part of the userInput string entered into the console.
      * @throws CoveException if the task description or deadline is empty, or no /by separator is used.
      */
-    public static void handleDeadline(String arguments) throws CoveException {
+    public void handleDeadline(String arguments) throws CoveException {
         if (!arguments.contains("/by")) {
             throw new CoveException("OOPS! Please specify a deadline with /by.");
         }
@@ -243,9 +250,9 @@ public class Cove {
      * @param arguments Only the arguments part of the userInput string entered into the console.
      * @throws CoveException if the task description, start, or end is empty, or no /from or /to separator is used.
      */
-    public static void handleEvent(String arguments) throws CoveException {
+    public void handleEvent(String arguments) throws CoveException {
         if (!arguments.contains("/from") || !arguments.contains("/to")) {
-            throw new CoveException("OOPS! Please specify a start date/time with /from and an end date/time with /to.");
+            throw new CoveException("OOPS! Please specify a start date with '/from' and an end date with '/to'.");
         }
 
         String description = arguments.split("/from", 2)[0].trim();
@@ -283,7 +290,7 @@ public class Cove {
      *
      * @throws CoveException always.
      */
-    public static void handleUnknownCommand() throws CoveException {
+    public void handleUnknownCommand() throws CoveException {
         throw new CoveException("OOPS! I don't understand what you mean!");
     }
 
@@ -295,7 +302,7 @@ public class Cove {
      * @param arguments Only the arguments part of the userInput string entered into the console.
      * @throws CoveException if a task number is not specified or is invalid, or more than 1 parameter is provided.
      */
-    public static void handleDelete(String arguments) throws CoveException {
+    public void handleDelete(String arguments) throws CoveException {
         if (arguments.isEmpty()) {
             throw new CoveException("OOPS! You didn't specify a task number to delete.");
         }
