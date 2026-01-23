@@ -1,12 +1,6 @@
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Scanner;
 
 /**
  * Main entry point for Cove chatbot.
@@ -15,23 +9,14 @@ import java.util.Scanner;
  */
 public class Cove {
 
-    public static Ui ui = new Ui();
+    private static Ui ui = new Ui();
+    private static Storage storage = new Storage("./data/cove.txt");
     private static TaskList tasks;
 
     public static void main(String[] args) {
-        // Initialise scanner and greet user
-        Scanner scanner = new Scanner(System.in);
-        tasks = new TaskList();
-        ui.printGreeting();
 
-        // Create cove.txt file if it does not exist yet and load tasks into tasks
-        File data = new File("./data/cove.txt");
-        try {
-            data.createNewFile();
-        } catch (IOException e) {
-            System.out.println("Something went wrong: " + e.getMessage());
-        }
-        loadTasks();
+        tasks = new TaskList(storage.load());
+        ui.printGreeting();
 
         // Run main loop
         while (true) {
@@ -143,7 +128,7 @@ public class Cove {
         }
 
         Task task = tasks.markTask(taskIndex);
-        saveTasks();
+        storage.save(tasks);
         ui.printTaskMarked(task);
     }
 
@@ -168,7 +153,7 @@ public class Cove {
         }
 
         Task task = tasks.unmarkTask(taskIndex);
-        saveTasks();
+        storage.save(tasks);
         ui.printTaskUnmarked(task);
     }
 
@@ -186,7 +171,7 @@ public class Cove {
             throw new CoveException("OOPS! The description of a todo cannot be empty.");
         }
         tasks.addTask(new ToDo(description));
-        saveTasks();
+        storage.save(tasks);
         ui.printTaskAdded(tasks.getTask(tasks.size()), tasks.size());
     }
 
@@ -220,7 +205,7 @@ public class Cove {
             throw new CoveException("OOPS! Invalid date format! Your dates must be in the format of \"yyyy/mm/dd\".");
         }
 
-        saveTasks();
+        storage.save(tasks);
         ui.printTaskAdded(tasks.getTask(tasks.size()), tasks.size());
     }
 
@@ -260,7 +245,7 @@ public class Cove {
             throw new CoveException("OOPS! Invalid date format! Your dates must be in the format of \"yyyy/mm/dd\".");
         }
 
-        saveTasks();
+        storage.save(tasks);
         ui.printTaskAdded(tasks.getTask(tasks.size()), tasks.size());
     }
 
@@ -297,116 +282,6 @@ public class Cove {
         Task task = tasks.deleteTask(taskIndex);
         ui.printTaskDeleted(task, tasks.size());
 
-        saveTasks();
+        storage.save(tasks);
     }
-
-    // Loading And Saving Helper Methods
-
-    /**
-     * Loads a single task from a data string from the data file and adds it to the task list.
-     * Obtains the task type specified by the first character of the data string,
-     * obtains the other relevant fields for the task, then creates the task with those fields.
-     * Marks it as done if the second character of the data string is '1', then adds the task
-     * to the task list.
-     *
-     * @param dataString the string representation of a task
-     * @throws CoveException if the task type is unrecognised or the data format is invalid.
-     */
-    private static void loadTask(String dataString) throws CoveException {
-        try {
-            switch (dataString.charAt(0)) {
-            case 'T': {
-                String description = dataString.split("\\|", 2)[1];
-                Task taskToLoad = new ToDo(description);
-                if (dataString.charAt(1) == '1') {
-                    taskToLoad.setDone(true);
-                }
-                tasks.addTask(taskToLoad);
-                break;
-            }
-            case 'D': {
-                String[] words = dataString.split("\\|", 3);
-                String description = words[1];
-                String by = words[2];
-
-                Task taskToLoad = new Deadline(description, LocalDate.parse(by));
-                if (dataString.charAt(1) == '1') {
-                    taskToLoad.setDone(true);
-                }
-                tasks.addTask(taskToLoad);
-                break;
-            }
-            case 'E': {
-                String[] words = dataString.split("\\|", 4);
-                String description = words[1];
-                String start = words[2];
-                String end = words[3];
-
-                Task taskToLoad = new Event(description, LocalDate.parse(start), LocalDate.parse(end));
-                if (dataString.charAt(1) == '1') {
-                    taskToLoad.setDone(true);
-                }
-                tasks.addTask(taskToLoad);
-                break;
-            }
-            default: {
-                throw new CoveException("Error: Unrecognised task type in save file.");
-            }
-            }
-        } catch (DateTimeParseException e) {
-            throw new CoveException("Error: Corrupted date in save file.");
-        }
-    }
-
-    /**
-     * Loads all tasks from the data file into the task list.
-     * Reads line by line from the data file for a task data string,
-     * and loads each task into the task list.
-     */
-    private static void loadTasks() {
-        try {
-            File data = new File("./data/cove.txt");
-            Scanner scanner = new Scanner(data);
-
-            while (scanner.hasNext()) {
-                loadTask(scanner.next());
-            }
-            scanner.close();
-
-        } catch (IOException e) {
-            System.out.println("Something went wrong: " + e.getMessage());
-        } catch (CoveException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    /**
-     * Appends text to a file at the specified path.
-     *
-     * @param filePath Path to the file to append the text to.
-     * @param text Text to append to the file.
-     * @throws IOException if an I/O error occurs.
-     */
-    private static void appendToFile(String filePath, String text) throws IOException {
-        FileWriter fileWriter = new FileWriter(filePath, true);
-        fileWriter.write(text);
-        fileWriter.close();
-    }
-
-    /**
-     * Updates the data file to reflect the current task list.
-     * Deletes the current data file, then creates it again to append each task's data
-     * from the task list into the data file.
-     */
-    private static void saveTasks() {
-        try {
-            Files.delete(Paths.get("./data/cove.txt"));
-            for (Task task : tasks.getTasks()) {
-                appendToFile("./data/cove.txt", task.dataString() + "\n");
-            }
-        } catch (IOException e) {
-            System.out.println("Something went wrong: " + e.getMessage());
-        }
-    }
-
 }
