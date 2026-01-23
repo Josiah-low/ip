@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.time.LocalDate;
 
 /**
  * Main entry point for Cove chatbot.
@@ -312,7 +313,13 @@ public class Cove {
         if (by.isEmpty()) {
             throw new CoveException("OOPS! You didn't specify the deadline.");
         }
-        tasks.add(new Deadline(description, by));
+
+        String[] date = by.split("/", 3); // yyyy-mm-dd
+        int yyyy = Integer.parseInt(date[0]);
+        int mm = Integer.parseInt(date[1]);
+        int dd = Integer.parseInt(date[2]);
+
+        tasks.add(new Deadline(description, LocalDate.of(yyyy, mm, dd)));
         saveTasks();
         printTaskAdded();
     }
@@ -339,11 +346,24 @@ public class Cove {
         if (start.isEmpty()) {
             throw new CoveException("OOPS! You didn't provide a start date/time.");
         }
+
         String end = userInput.split("/to", 2)[1].trim();
         if (end.isEmpty()) {
             throw new CoveException("OOPS! You didn't provide a end date/time.");
         }
-        tasks.add(new Event(description, start, end));
+
+        String[] startDate = start.split("/", 3); // yyyy-mm-dd
+        int startYyyy = Integer.parseInt(startDate[0]);
+        int startMm = Integer.parseInt(startDate[1]);
+        int startDd = Integer.parseInt(startDate[2]);
+
+        String[] endDate = end.split("/", 3); // yyyy-mm-dd
+        int endYyyy = Integer.parseInt(endDate[0]);
+        int endMm = Integer.parseInt(endDate[1]);
+        int endDd = Integer.parseInt(endDate[2]);
+
+        tasks.add(new Event(description, LocalDate.of(startYyyy, startMm, startDd),
+                LocalDate.of(endYyyy, endMm, endDd)));
         saveTasks();
         printTaskAdded();
     }
@@ -408,7 +428,13 @@ public class Cove {
             String[] words = dataString.split("\\|", 3);
             String description = words[1];
             String by = words[2];
-            Task taskToLoad = new Deadline(description, by);
+
+            String[] date = by.split("-");
+            int yyyy = Integer.parseInt(date[0]);
+            int mm = Integer.parseInt(date[1]);
+            int dd = Integer.parseInt(date[2]);
+
+            Task taskToLoad = new Deadline(description, LocalDate.of(yyyy, mm, dd));
             if (dataString.charAt(1) == '1') {
                 taskToLoad.setDone(true);
             }
@@ -420,7 +446,19 @@ public class Cove {
             String description = words[1];
             String start = words[2];
             String end = words[3];
-            Task taskToLoad = new Event(description, start, end);
+
+            String[] startDate = start.split("/", 3); // yyyy-mm-dd
+            int startYyyy = Integer.parseInt(startDate[0]);
+            int startMm = Integer.parseInt(startDate[1]);
+            int startDd = Integer.parseInt(startDate[2]);
+
+            String[] endDate = end.split("/", 3); // yyyy-mm-dd
+            int endYyyy = Integer.parseInt(endDate[0]);
+            int endMm = Integer.parseInt(endDate[1]);
+            int endDd = Integer.parseInt(endDate[2]);
+
+            Task taskToLoad = new Event(description, LocalDate.of(startYyyy, startMm, startDd),
+                    LocalDate.of(endYyyy, endMm, endDd));
             if (dataString.charAt(1) == '1') {
                 taskToLoad.setDone(true);
             }
@@ -459,7 +497,7 @@ public class Cove {
      * Appends text to a file at the specified path.
      *
      * @param filePath Path to the file to append the text to.
-     * @param text Text to append to the file.
+     * @param text     Text to append to the file.
      * @throws IOException if an I/O error occurs.
      */
     private static void appendToFile(String filePath, String text) throws IOException {
