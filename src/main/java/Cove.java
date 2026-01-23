@@ -349,7 +349,6 @@ public class Cove {
         if (start.isEmpty()) {
             throw new CoveException("OOPS! You didn't provide a start date/time.");
         }
-
         String end = userInput.split("/to", 2)[1].trim();
         if (end.isEmpty()) {
             throw new CoveException("OOPS! You didn't provide a end date/time.");
@@ -413,44 +412,48 @@ public class Cove {
      * @throws CoveException if the task type is unrecognised or the data format is invalid.
      */
     private static void loadTask(String dataString) throws CoveException {
-        switch (dataString.charAt(0)) {
-        case 'T': {
-            String description = dataString.split("\\|", 2)[1];
-            Task taskToLoad = new ToDo(description);
-            if (dataString.charAt(1) == '1') {
-                taskToLoad.setDone(true);
+        try {
+            switch (dataString.charAt(0)) {
+            case 'T': {
+                String description = dataString.split("\\|", 2)[1];
+                Task taskToLoad = new ToDo(description);
+                if (dataString.charAt(1) == '1') {
+                    taskToLoad.setDone(true);
+                }
+                tasks.add(taskToLoad);
+                break;
             }
-            tasks.add(taskToLoad);
-            break;
-        }
-        case 'D': {
-            String[] words = dataString.split("\\|", 3);
-            String description = words[1];
-            String by = words[2];
+            case 'D': {
+                String[] words = dataString.split("\\|", 3);
+                String description = words[1];
+                String by = words[2];
 
-            Task taskToLoad = new Deadline(description, LocalDate.parse(by));
-            if (dataString.charAt(1) == '1') {
-                taskToLoad.setDone(true);
+                Task taskToLoad = new Deadline(description, LocalDate.parse(by));
+                if (dataString.charAt(1) == '1') {
+                    taskToLoad.setDone(true);
+                }
+                tasks.add(taskToLoad);
+                break;
             }
-            tasks.add(taskToLoad);
-            break;
-        }
-        case 'E': {
-            String[] words = dataString.split("\\|", 4);
-            String description = words[1];
-            String start = words[2];
-            String end = words[3];
+            case 'E': {
+                String[] words = dataString.split("\\|", 4);
+                String description = words[1];
+                String start = words[2];
+                String end = words[3];
 
-            Task taskToLoad = new Event(description, LocalDate.parse(start), LocalDate.parse(end));
-            if (dataString.charAt(1) == '1') {
-                taskToLoad.setDone(true);
+                Task taskToLoad = new Event(description, LocalDate.parse(start), LocalDate.parse(end));
+                if (dataString.charAt(1) == '1') {
+                    taskToLoad.setDone(true);
+                }
+                tasks.add(taskToLoad);
+                break;
             }
-            tasks.add(taskToLoad);
-            break;
-        }
-        default: {
-            throw new CoveException("Unrecognised task type.");
-        }
+            default: {
+                throw new CoveException("Error: Unrecognised task type in save file.");
+            }
+            }
+        } catch (DateTimeParseException e) {
+            throw new CoveException("Error: Corrupted date in save file.");
         }
     }
 
