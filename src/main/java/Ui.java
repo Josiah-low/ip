@@ -111,5 +111,8 @@ public class Ui {
         System.out.println();
     }
 
+    public String readUserInput() {
+        return scanner.nextLine();
+    }
 
 }

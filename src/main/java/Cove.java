@@ -15,12 +15,14 @@ import java.util.Scanner;
  * Users can mark their tasks as done/not done, delete tasks, and view their task list.
  */
 public class Cove {
+
     private static ArrayList<Task> tasks = new ArrayList<Task>();
+    public static Ui ui = new Ui();
 
     public static void main(String[] args) {
         // Initialise scanner and greet user
         Scanner scanner = new Scanner(System.in);
-        printGreeting();
+        ui.printGreeting();
 
         // Create cove.txt file if it does not exist yet and load tasks into tasks
         File data = new File("./data/cove.txt");
@@ -35,7 +37,7 @@ public class Cove {
         while (true) {
             try {
                 String userInput = scanner.nextLine();
-                printLongLine();
+                ui.printLongLine();
                 String command = userInput.split(" ")[0];
 
                 switch (command) {
@@ -91,32 +93,6 @@ public class Cove {
     }
 
     /**
-     * Prints long horizontal line separator to the console.
-     */
-    public static void printLongLine() {
-        System.out.println("____________________________________________________________");
-    }
-
-    /**
-     * Prints greeting message from Cove to the console.
-     */
-    public static void printGreeting() {
-        printLongLine();
-        System.out.println(" Hello! I'm Cove");
-        System.out.println(" What can I do for you?");
-        printLongLine();
-        System.out.println();
-    }
-
-    /**
-     * Prints exit message from Cove to the console.
-     */
-    public static void printExit() {
-        System.out.println(" Bye. Hope to see you again soon!");
-        printLongLine();
-    }
-
-    /**
      * Marks task as not done and saves the updated task list.
      * Obtains the task at the user specified index to set its isDone status to true,
      * updates the changes to the data file, and prints a confirmation to the console.
@@ -127,10 +103,7 @@ public class Cove {
         Task task = tasks.get(taskIndex - 1);
         task.setDone(true);
         saveTasks();
-        System.out.println(" Nice! I've marked this task as done:");
-        System.out.println(" " + task.toString());
-        printLongLine();
-        System.out.println();
+        ui.printTaskMarked(task);
     }
 
     /**
@@ -144,10 +117,7 @@ public class Cove {
         Task task = tasks.get(taskIndex - 1);
         task.setDone(false);
         saveTasks();
-        System.out.println(" OK, I've marked this task as not done yet:");
-        System.out.println(" " + task.toString());
-        printLongLine();
-        System.out.println();
+        ui.printTaskUnmarked(task);
     }
 
     /**
@@ -156,12 +126,7 @@ public class Cove {
      * deadline (for Deadline tasks), start and end (for Event tasks).
      */
     public static void printTaskList() {
-        System.out.println(" Here are the tasks in your list:");
-        for (int i = 1; i <= tasks.size(); i++) {
-            System.out.printf(" %d.%s\n", i, tasks.get(i - 1).toString());
-        }
-        printLongLine();
-        System.out.println();
+        ui.printTaskList(tasks);
     }
 
     /**
@@ -172,34 +137,8 @@ public class Cove {
      * @param taskIndex index of the task to delete.
      */
     public static void deleteTask(int taskIndex) {
-        System.out.println(" Noted. I've removed this task:");
         Task task = tasks.remove(taskIndex - 1);
-        System.out.println("   " + task.toString());
-        printNumOfTasks();
-        printLongLine();
-        System.out.println();
-    }
-
-    /**
-     * Prints a message about the number of tasks in the user's task list to the console.
-     */
-    public static void printNumOfTasks() {
-        if (tasks.size() == 1) {
-            System.out.println(" Now you have 1 task in the list.");
-        } else {
-            System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
-        }
-    }
-
-    /**
-     * Prints a confirmation message about the most recent task added to the list to the console.
-     */
-    public static void printTaskAdded() {
-        System.out.println(" Got it. I've added this task:");
-        System.out.println(" " + tasks.get(tasks.size() - 1).toString());
-        printNumOfTasks();
-        printLongLine();
-        System.out.println();
+        ui.printTaskDeleted(task, tasks.size());
     }
 
     // Command Handling Helper Methods
@@ -215,7 +154,7 @@ public class Cove {
         if (!userInput.trim().equals("bye")) {
             throw new CoveException("OOPS! 'bye' command does not accept any parameters.");
         }
-        printExit();
+        ui.printExit();
     }
 
     /**
@@ -291,7 +230,7 @@ public class Cove {
         }
         tasks.add(new ToDo(description));
         saveTasks();
-        printTaskAdded();
+        ui.printTaskAdded(tasks.get(tasks.size() - 1), tasks.size());
     }
 
     /**
@@ -325,7 +264,7 @@ public class Cove {
         }
 
         saveTasks();
-        printTaskAdded();
+        ui.printTaskAdded(tasks.get(tasks.size() - 1), tasks.size());
     }
 
     /**
@@ -365,7 +304,7 @@ public class Cove {
         }
 
         saveTasks();
-        printTaskAdded();
+        ui.printTaskAdded(tasks.get(tasks.size() - 1), tasks.size());
     }
 
     /**
