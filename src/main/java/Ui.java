@@ -39,7 +39,9 @@ public class Ui {
     /**
      * Prints the user's task list to the console.
      * Prints information about each task's task type, isDone status, description,
-     * deadline (for Deadline tasks), start and end (for Event tasks).
+     * deadline date (for Deadline tasks), start and end dates (for Event tasks).
+     *
+     * @param tasks The user's task list.
      */
     public void printTaskList(ArrayList<Task> tasks) {
         System.out.println(" Here are the tasks in your list:");
@@ -52,6 +54,8 @@ public class Ui {
 
     /**
      * Prints a message about the number of tasks in the user's task list to the console.
+     *
+     * @param numOfTasks The total number of tasks in the user's task list.
      */
     public void printNumOfTasks(int numOfTasks) {
         if (numOfTasks == 1) {
@@ -63,6 +67,9 @@ public class Ui {
 
     /**
      * Prints a confirmation message about the most recent task added to the list to the console.
+     *
+     * @param task The task to print as added.
+     * @param numOfTasks The total number of tasks in the user's task list.
      */
     public void printTaskAdded(Task task, int numOfTasks) {
         System.out.println(" Got it. I've added this task:");
@@ -74,6 +81,9 @@ public class Ui {
 
     /**
      * Prints a confirmation message about the most recent task added to the list to the console.
+     *
+     * @param task The task to print as deleted.
+     * @param numOfTasks The total number of tasks in the user's task list.
      */
     public void printTaskDeleted(Task task, int numOfTasks) {
         System.out.println(" Noted. I've removed this task:");
@@ -84,11 +94,9 @@ public class Ui {
     }
 
     /**
-     * Marks task as not done and saves the updated task list.
-     * Obtains the task at the user specified index to set its isDone status to true,
-     * updates the changes to the data file, and prints a confirmation to the console.
+     * Prints a confirmation message about the specified task being marked as done.
      *
-     * @param task Task to print as marked as done.
+     * @param task The task to print as marked as done.
      */
     public void printTaskMarked(Task task) {
         System.out.println(" Nice! I've marked this task as done:");
@@ -98,11 +106,9 @@ public class Ui {
     }
 
     /**
-     * Marks task as not done and saves the updated task list.
-     * Obtains the task at the user specified index to set its isDone status to false,
-     * updates the changes to the data file, and prints a confirmation to the console.
+     * Prints a confirmation message about the specified task being marked as not done.
      *
-     * @param task Task to print as marked as not done.
+     * @param task The task to print as marked as not done.
      */
     public void printTaskUnmarked(Task task) {
         System.out.println(" OK, I've marked this task as not done yet:");

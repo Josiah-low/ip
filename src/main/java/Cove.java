@@ -36,7 +36,7 @@ public class Cove {
         // Run main loop
         while (true) {
             try {
-                String userInput = scanner.nextLine();
+                String userInput = ui.readUserInput();
                 ui.printLongLine();
                 String command = userInput.split(" ")[0];
 
