@@ -8,20 +8,35 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Handles loading and saving tasks to data file.
+ */
 public class Storage {
 
+    /** File path specifying where to save the tasks information */
     private String filePath;
 
+    /**
+     * Creates a new Storage with the specified filePath.
+     * Creates the data file if it does not exist.
+     *
+     * @param filePath The path of the file to store tasks information.
+     */
     public Storage(String filePath) {
         this.filePath = filePath;
+        File data = new File(filePath);
+        try {
+            data.createNewFile();
+        } catch (IOException e) {
+            System.out.println("Something went wrong: " + e.getMessage());
+        }
     }
 
     /**
-     * Loads a single task from a data string from the data file and adds it to the task list.
+     * Returns a single task with the details in the provided data string.
      * Obtains the task type specified by the first character of the data string,
      * obtains the other relevant fields for the task, then creates the task with those fields.
-     * Marks it as done if the second character of the data string is '1', then adds the task
-     * to the task list.
+     * Marks it as done if the second character of the data string is '1', then returns the task.
      *
      * @param dataString the string representation of a task
      * @throws CoveException if the task type is unrecognised or the data format is invalid.
@@ -70,19 +85,19 @@ public class Storage {
     }
 
     /**
-     * Loads all tasks from the data file into the task list.
+     * Returns an array list of tasks as specified by the data file.
      * Reads line by line from the data file for a task data string,
-     * and loads each task into the task list.
+     * and adds them to the tasks array list before returning it.
      */
-    private TaskList load() {
-        TaskList tasks = new TaskList();
+    public ArrayList<Task> load() {
+        ArrayList<Task> tasks = new ArrayList<Task>();
 
         try {
             File data = new File("./data/cove.txt");
             Scanner scanner = new Scanner(data);
 
             while (scanner.hasNext()) {
-                tasks.addTask(loadTask(scanner.next()));
+                tasks.add(loadTask(scanner.next()));
             }
             scanner.close();
 
@@ -96,7 +111,7 @@ public class Storage {
     }
 
     /**
-     * Appends text to a file at the specified path.
+     * Helper method that appends text to a file at the specified path.
      *
      * @param filePath Path to the file to append the text to.
      * @param text Text to append to the file.
@@ -112,8 +127,10 @@ public class Storage {
      * Updates the data file to reflect the current task list.
      * Deletes the current data file, then creates it again to append each task's data
      * from the task list into the data file.
+     *
+     * @param tasks The task list to save into the data file.
      */
-    private static void save(TaskList tasks) {
+    public void save(TaskList tasks) {
         try {
             Files.delete(Paths.get("./data/cove.txt"));
             for (Task task : tasks.getTasks()) {
