@@ -68,7 +68,6 @@ public class Ui {
             System.out.println(" Now you have " + numOfTasks + " tasks in the list.");
         }
     }
-
     /**
      * Prints a confirmation message about the most recent task added to the list to the console.
      *

@@ -5,10 +5,14 @@ package cove;
  * This is the base class for all task types. All tasks have a description
  * and a completion status. Subclasses must implement specific task types.
  */
- public abstract class Task {
-    /** Description of the task */
+public abstract class Task {
+    /**
+     * Description of the task
+     */
     private String description;
-    /** Completion status of the task */
+    /**
+     * Completion status of the task
+     */
     private boolean isDone;
 
     /**

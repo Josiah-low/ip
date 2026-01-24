@@ -150,7 +150,7 @@ public class Cove {
             ui.printTaskMarked(task);
 
         } catch (NumberFormatException e) {
-            throw new CoveException("OOPS! cove.Task index must be a valid integer.");
+            throw new CoveException("OOPS! Task index must be a valid integer.");
         }
     }
 
@@ -184,7 +184,7 @@ public class Cove {
             ui.printTaskUnmarked(task);
 
         } catch (NumberFormatException e) {
-            throw new CoveException("OOPS! cove.Task index must be a valid integer.");
+            throw new CoveException("OOPS! Task index must be a valid integer.");
         }
     }
 
@@ -316,7 +316,7 @@ public class Cove {
             storage.save(tasks);
 
         } catch (NumberFormatException e) {
-            throw new CoveException("OOPS! cove.Task index must be a valid integer.");
+            throw new CoveException("OOPS! Task index must be a valid integer.");
         }
     }
 
