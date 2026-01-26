@@ -1,5 +1,6 @@
 package cove;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Ui {
@@ -127,6 +128,17 @@ public class Ui {
      */
     public String readUserInput() {
         return this.scanner.nextLine();
+    }
+
+    public void printTasksWithMatchingKeyword(ArrayList<Task> tasks) {
+        System.out.println(" Here are the matching tasks in your list:");
+
+        for (int i = 1; i <= tasks.size(); i++) {
+            Task matchingTask = tasks.get(i - 1);
+            System.out.println(" " + matchingTask.getIndex() + "." + matchingTask.toString());
+        }
+
+        printLongLine();
     }
 
 }

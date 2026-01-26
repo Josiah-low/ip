@@ -15,6 +15,8 @@ public abstract class Task {
      */
     private boolean isDone;
 
+    private int index;
+
     /**
      * Creates a new cove.Task with the specified description.
      *
@@ -32,8 +34,16 @@ public abstract class Task {
         return this.isDone;
     }
 
+    public int getIndex() {
+        return this.index;
+    }
+
     public void setDone(boolean isDone) {
         this.isDone = isDone;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     /**
