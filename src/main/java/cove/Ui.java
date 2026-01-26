@@ -130,11 +130,12 @@ public class Ui {
         return scanner.nextLine();
     }
 
-    public void printTasksWithMatchingDescription(ArrayList<Task> tasks) {
-        System.out.println("Here are the matching tasks in your list:");
+    public void printTasksWithMatchingKeyword(ArrayList<Task> tasks) {
+        System.out.println(" Here are the matching tasks in your list:");
 
         for (int i = 1; i <= tasks.size(); i++) {
-            System.out.println(i + "." + tasks.get(i - 1).toString());
+            Task matchingTask = tasks.get(i - 1);
+            System.out.println(" " + matchingTask.getIndex() + "." + matchingTask.toString());
         }
 
         printLongLine();

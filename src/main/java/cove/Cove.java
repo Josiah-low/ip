@@ -3,6 +3,7 @@ package cove;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 
 /**
  * Main entry point for cove.Cove chatbot.
@@ -69,6 +70,11 @@ public class Cove {
 
                 case "delete": {
                     handleDelete(arguments);
+                    break;
+                }
+
+                case "find": {
+                    handleFind(arguments);
                     break;
                 }
 
@@ -318,6 +324,20 @@ public class Cove {
         } catch (NumberFormatException e) {
             throw new CoveException("OOPS! Task index must be a valid integer.");
         }
+    }
+
+    public void handleFind(String arguments) throws CoveException {
+        if (arguments.isEmpty()) {
+            throw new CoveException("OOPS! You didn't specify a keyword to search for.");
+        }
+
+        ArrayList<Task> matchingTasks = this.tasks.getTasksWithMatchingKeyword(arguments);
+
+        if (matchingTasks.isEmpty()) {
+            throw new CoveException("OOPS! None of your tasks contains the keyword.");
+        }
+
+        this.ui.printTasksWithMatchingKeyword(matchingTasks);
     }
 
     /**
