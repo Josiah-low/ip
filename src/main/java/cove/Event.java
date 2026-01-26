@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * Represents a task with a start and end date.
- * An cove.Event task includes a description and a start date on which the task begins,
+ * An Event task includes a description and a start date on which the task begins,
  * and an end date on which the task ends.
  */
 public class Event extends Task {
@@ -37,7 +37,7 @@ public class Event extends Task {
     @Override
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy");
-        return "[E]" + super.toString() + " (from: " + start.format(formatter) + " to: " + end.format(formatter) + ")";
+        return "[E]" + super.toString() + " (from: " + this.start.format(formatter) + " to: " + this.end.format(formatter) + ")";
     }
 
     /**

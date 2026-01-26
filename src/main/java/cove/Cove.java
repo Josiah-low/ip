@@ -21,22 +21,22 @@ public class Cove {
      * @param filePath The path of the file to store the task data.
      */
     public Cove(String filePath) {
-        ui = new Ui();
-        storage = new Storage(filePath);
-        tasks = new TaskList(storage.load());
+        this.ui = new Ui();
+        this.storage = new Storage(filePath);
+        this.tasks = new TaskList(this.storage.load());
     }
 
     /**
      * Runs the Cove program.
      */
     public void run() {
-        ui.printGreeting();
+        this.ui.printGreeting();
 
         // Run main loop
         while (true) {
             try {
-                String userInput = ui.readUserInput();
-                ui.printLongLine();
+                String userInput = this.ui.readUserInput();
+                this.ui.printLongLine();
                 String command = Parser.parseCommand(userInput);
                 String arguments = Parser.parseArguments(userInput);
 
@@ -110,7 +110,7 @@ public class Cove {
             throw new CoveException("OOPS! 'bye' command does not accept any parameters.");
         }
 
-        ui.printExit();
+        this.ui.printExit();
     }
 
     /**
@@ -125,7 +125,7 @@ public class Cove {
             throw new CoveException("OOPS! 'list' command does not accept any parameters.");
         }
 
-        ui.printTaskList(tasks);
+        this.ui.printTaskList(this.tasks);
     }
 
     /**
@@ -149,13 +149,13 @@ public class Cove {
         try {
             int taskIndex = Integer.parseInt(arguments);
 
-            if (taskIndex < 1 || taskIndex > tasks.size()) {
+            if (taskIndex < 1 || taskIndex > this.tasks.size()) {
                 throw new CoveException("OOPS! The task number you provided is invalid.");
             }
 
-            Task task = tasks.markTask(taskIndex);
-            storage.save(tasks);
-            ui.printTaskMarked(task);
+            Task task = this.tasks.markTask(taskIndex);
+            this.storage.save(this.tasks);
+            this.ui.printTaskMarked(task);
 
         } catch (NumberFormatException e) {
             throw new CoveException("OOPS! Task index must be a valid integer.");
@@ -183,13 +183,13 @@ public class Cove {
         try {
             int taskIndex = Integer.parseInt(arguments);
 
-            if (taskIndex < 1 || taskIndex > tasks.size()) {
+            if (taskIndex < 1 || taskIndex > this.tasks.size()) {
                 throw new CoveException("OOPS! The task number you provided is invalid.");
             }
 
-            Task task = tasks.unmarkTask(taskIndex);
-            storage.save(tasks);
-            ui.printTaskUnmarked(task);
+            Task task = this.tasks.unmarkTask(taskIndex);
+            this.storage.save(this.tasks);
+            this.ui.printTaskUnmarked(task);
 
         } catch (NumberFormatException e) {
             throw new CoveException("OOPS! Task index must be a valid integer.");
@@ -211,9 +211,9 @@ public class Cove {
             throw new CoveException("OOPS! The description of a todo cannot be empty.");
         }
 
-        tasks.addTask(new ToDo(description));
-        storage.save(tasks);
-        ui.printTaskAdded(tasks.getTask(tasks.size()), tasks.size());
+        this.tasks.addTask(new ToDo(description));
+        this.storage.save(this.tasks);
+        this.ui.printTaskAdded(this.tasks.getTask(this.tasks.size()), this.tasks.size());
     }
 
     /**
@@ -242,14 +242,14 @@ public class Cove {
 
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-            tasks.addTask(new Deadline(description, LocalDate.parse(by, formatter)));
+            this.tasks.addTask(new Deadline(description, LocalDate.parse(by, formatter)));
 
         } catch (DateTimeParseException e) {
             throw new CoveException("OOPS! Invalid date format! Your dates must be in the format of \"yyyy/mm/dd\".");
         }
 
-        storage.save(tasks);
-        ui.printTaskAdded(tasks.getTask(tasks.size()), tasks.size());
+        this.storage.save(this.tasks);
+        this.ui.printTaskAdded(this.tasks.getTask(this.tasks.size()), this.tasks.size());
     }
 
     /**
@@ -284,15 +284,15 @@ public class Cove {
 
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-            tasks.addTask(new Event(description, LocalDate.parse(start, formatter),
+            this.tasks.addTask(new Event(description, LocalDate.parse(start, formatter),
                     LocalDate.parse(end, formatter)));
 
         } catch (DateTimeParseException e) {
             throw new CoveException("OOPS! Invalid date format! Your dates must be in the format of \"yyyy/mm/dd\".");
         }
 
-        storage.save(tasks);
-        ui.printTaskAdded(tasks.getTask(tasks.size()), tasks.size());
+        this.storage.save(this.tasks);
+        this.ui.printTaskAdded(this.tasks.getTask(this.tasks.size()), this.tasks.size());
     }
 
     /**
@@ -315,13 +315,13 @@ public class Cove {
         try {
             int taskIndex = Integer.parseInt(arguments);
 
-            if (taskIndex < 1 || taskIndex > tasks.size()) {
+            if (taskIndex < 1 || taskIndex > this.tasks.size()) {
                 throw new CoveException("OOPS! The task number you provided is invalid.");
             }
 
-            Task task = tasks.deleteTask(taskIndex);
-            ui.printTaskDeleted(task, tasks.size());
-            storage.save(tasks);
+            Task task = this.tasks.deleteTask(taskIndex);
+            this.ui.printTaskDeleted(task, this.tasks.size());
+            this.storage.save(this.tasks);
 
         } catch (NumberFormatException e) {
             throw new CoveException("OOPS! Task index must be a valid integer.");

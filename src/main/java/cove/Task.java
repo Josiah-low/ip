@@ -37,7 +37,7 @@ public abstract class Task {
     }
 
     /**
-     * Returns a string representation of a cove.Task for printing to console.
+     * Returns a string representation of a Task for printing to console.
      * The format is: "[isDone] description" where isDone is "X" if true,
      * or a space if false.
      */
@@ -51,7 +51,7 @@ public abstract class Task {
     }
 
     /**
-     * Returns a string representation of a cove.Task for saving to the data file.
+     * Returns a string representation of a Task for saving to the data file.
      * The format is: "X|description" where X is "1" if true, or "0" if false.
      */
     public String dataString() {

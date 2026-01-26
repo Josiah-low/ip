@@ -126,7 +126,7 @@ public class Ui {
      * @return The string containing the user's input to the console.
      */
     public String readUserInput() {
-        return scanner.nextLine();
+        return this.scanner.nextLine();
     }
 
 }
