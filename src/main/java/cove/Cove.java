@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 /**
- * Main entry point for cove.Cove chatbot.
+ * Main entry point for Cove chatbot.
  * cove.Cove allows the user to add 3 different types of tasks to a list: cove.ToDo, cove.Deadline, and cove.Event.
  * Users can mark their tasks as done/not done, delete tasks, and view their task list.
  */
