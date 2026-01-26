@@ -15,12 +15,20 @@ public class Cove {
     private Storage storage;
     private TaskList tasks;
 
+    /**
+     * Creates and initialises new Cove instance with a specified file path to store task data.
+     *
+     * @param filePath The path of the file to store the task data.
+     */
     public Cove(String filePath) {
         ui = new Ui();
         storage = new Storage(filePath);
         tasks = new TaskList(storage.load());
     }
 
+    /**
+     * Runs the Cove program.
+     */
     public void run() {
         ui.printGreeting();
 
