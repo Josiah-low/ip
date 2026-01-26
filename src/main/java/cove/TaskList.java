@@ -85,4 +85,17 @@ public class TaskList {
         return this.tasks.get(taskIndex - 1);
     }
 
+    public ArrayList<Task> getTasksWithMatchingDescription(String description) {
+        ArrayList<Task> matchingTasks = new ArrayList<>();
+
+        for (int i = 1; i <= this.tasks.size(); i++) {
+            Task task = getTask(i);
+            if (task.getDescription().toLowerCase().contains(description.toLowerCase())) {
+                matchingTasks.add(task);
+            }
+        }
+
+        return matchingTasks;
+    }
+
 }
