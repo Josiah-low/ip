@@ -27,7 +27,7 @@ public class Ui {
      */
     public void printGreeting() {
         printLongLine();
-        System.out.println(" Hello! I'm cove.Cove");
+        System.out.println(" Hello! I'm Cove");
         System.out.println(" What can I do for you?");
         printLongLine();
         System.out.println();
@@ -139,6 +139,56 @@ public class Ui {
         }
 
         printLongLine();
+    }
+
+    // Methods for gui
+    public String getGreetingAsString() {
+        return " Hello! I'm Cove\n What can I do for you?";
+    }
+
+    public String getByeAsString(String arguments) {
+        return " Bye. Hope to see you again soon!";
+    }
+
+    public String getTaskListAsString(TaskList tasks) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(" Here are the tasks in your list:");
+        for (int i = 1; i <= tasks.size(); i++) {
+            sb.append("\n ").append(i).append(". ").append(tasks.getTask(i).toString());
+        }
+        return sb.toString();
+    }
+
+    public String getMarkedTaskAsString(Task task) {
+        return " Nice! I've marked this task as done:\n" + task.toString();
+    }
+
+    public String getUnmarkedTaskAsString(Task task) {
+        return " OK, I've marked this task as not done yet:\n" + task.toString();
+    }
+
+    public String getNumOfTasksAsString(int numOfTasks) {
+        if (numOfTasks == 1) {
+            return " Now you have 1 task in the list.";
+        } else {
+            return " Now you have " + numOfTasks + " tasks in the list.";
+        }
+    }
+
+    public String getTaskAddedString(Task task, int numOfTasks) {
+        return " Got it. I've added this task:"
+                + "\n "
+                + task.toString()
+                + " \n"
+                + getNumOfTasksAsString(numOfTasks);
+    }
+
+    public String getTaskDeletedString(Task task, int numOfTasks) {
+        return " Noted. I've removed this task:"
+                + "\n   "
+                + task.toString()
+                + " \n"
+                + getNumOfTasksAsString(numOfTasks);
     }
 
 }
