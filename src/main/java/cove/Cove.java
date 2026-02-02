@@ -42,9 +42,10 @@ public class Cove {
                 String arguments = Parser.parseArguments(userInput);
 
                 switch (command) {
-                case "bye":
+                case "bye": {
                     handleBye(arguments);
                     return;
+                }
 
                 case "list": {
                     handleList(arguments);
@@ -102,6 +103,55 @@ public class Cove {
         new Cove("./data/cove.txt").run();
     }
 
+    public String getResponse(String input) {
+        try {
+            String command = Parser.parseCommand(input);
+            String arguments = Parser.parseArguments(input);
+
+            switch (command) {
+            case "bye":
+                handleBye(arguments);
+                return ui.getByeAsString(arguments);
+
+            case "list":
+                handleList(arguments);
+                return ui.getTaskListAsString(this.tasks);
+
+            case "mark":
+                Task markedTask = handleMark(arguments);
+                return ui.getMarkedTaskAsString(markedTask);
+
+            case "unmark":
+                Task unmarkedTask = handleUnmark(arguments);
+                return ui.getUnmarkedTaskAsString(unmarkedTask);
+
+            case "todo":
+                Task todoTask = handleTodo(arguments);
+                return ui.getTaskAddedString(todoTask, this.tasks.size());
+
+            case "deadline":
+                Task deadlineTask = handleDeadline(arguments);
+                return ui.getTaskAddedString(deadlineTask, this.tasks.size());
+
+            case "event":
+                Task eventTask = handleEvent(arguments);
+                return ui.getTaskAddedString(eventTask, this.tasks.size());
+
+            case "delete":
+                Task deletedTask = handleDelete(arguments);
+                return ui.getTaskDeletedString(deletedTask, this.tasks.size());
+
+            case "find":
+                return handleFind(arguments);
+
+            default:
+                return "OOPS! I don't understand what you mean!";
+            }
+        } catch (CoveException e) {
+            return e.getMessage().trim();
+        }
+    }
+
     // Command handling helper methods
 
     /**
@@ -143,7 +193,7 @@ public class Cove {
      * @throws CoveException         if a task number is not specified or is invalid, or more than 1 parameter is provided.
      * @throws NumberFormatException if the argument provided is not a valid integer.
      */
-    public void handleMark(String arguments) throws CoveException {
+    public Task handleMark(String arguments) throws CoveException {
         if (arguments.isEmpty()) {
             throw new CoveException("OOPS! You didn't specify a task number to mark.");
         }
@@ -163,6 +213,8 @@ public class Cove {
             this.storage.save(this.tasks);
             this.ui.printTaskMarked(task);
 
+            return task;
+
         } catch (NumberFormatException e) {
             throw new CoveException("OOPS! Task index must be a valid integer.");
         }
@@ -177,7 +229,7 @@ public class Cove {
      * @throws CoveException         if a task number is not specified or is invalid, or more than 1 parameter is provided.
      * @throws NumberFormatException if the argument provided is not a valid integer.
      */
-    public void handleUnmark(String arguments) throws CoveException {
+    public Task handleUnmark(String arguments) throws CoveException {
         if (arguments.isEmpty()) {
             throw new CoveException("OOPS! You didn't specify a task number to mark.");
         }
@@ -197,6 +249,8 @@ public class Cove {
             this.storage.save(this.tasks);
             this.ui.printTaskUnmarked(task);
 
+            return task;
+
         } catch (NumberFormatException e) {
             throw new CoveException("OOPS! Task index must be a valid integer.");
         }
@@ -210,16 +264,19 @@ public class Cove {
      * @param arguments Only the arguments part of the userInput string entered into the console.
      * @throws CoveException if the task description is empty.
      */
-    public void handleTodo(String arguments) throws CoveException {
+    public Task handleTodo(String arguments) throws CoveException {
         String description = arguments;
 
         if (description.isEmpty()) {
             throw new CoveException("OOPS! The description of a todo cannot be empty.");
         }
 
-        this.tasks.addTask(new ToDo(description));
+        Task task = new ToDo(description);
+        this.tasks.addTask(task);
         this.storage.save(this.tasks);
-        this.ui.printTaskAdded(this.tasks.getTask(this.tasks.size()), this.tasks.size());
+        this.ui.printTaskAdded(task, this.tasks.size());
+
+        return task;
     }
 
     /**
@@ -231,7 +288,7 @@ public class Cove {
      * @param arguments Only the arguments part of the userInput string entered into the console.
      * @throws CoveException if the task description or deadline is empty, or no /by separator is used.
      */
-    public void handleDeadline(String arguments) throws CoveException {
+    public Task handleDeadline(String arguments) throws CoveException {
         if (!arguments.contains("/by")) {
             throw new CoveException("OOPS! Please specify a deadline with /by.");
         }
@@ -248,14 +305,17 @@ public class Cove {
 
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-            this.tasks.addTask(new Deadline(description, LocalDate.parse(by, formatter)));
+            Task task = new Deadline(description, LocalDate.parse(by, formatter));
+            this.tasks.addTask(task);
+
+            this.storage.save(this.tasks);
+            this.ui.printTaskAdded(task, this.tasks.size());
+
+            return task;
 
         } catch (DateTimeParseException e) {
             throw new CoveException("OOPS! Invalid date format! Your dates must be in the format of \"yyyy/mm/dd\".");
         }
-
-        this.storage.save(this.tasks);
-        this.ui.printTaskAdded(this.tasks.getTask(this.tasks.size()), this.tasks.size());
     }
 
     /**
@@ -267,7 +327,7 @@ public class Cove {
      * @param arguments Only the arguments part of the userInput string entered into the console.
      * @throws CoveException if the task description, start, or end is empty, or no /from or /to separator is used.
      */
-    public void handleEvent(String arguments) throws CoveException {
+    public Task handleEvent(String arguments) throws CoveException {
         if (!arguments.contains("/from") || !arguments.contains("/to")) {
             throw new CoveException("OOPS! Please specify a start date with '/from' and an end date with '/to'.");
         }
@@ -290,15 +350,18 @@ public class Cove {
 
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-            this.tasks.addTask(new Event(description, LocalDate.parse(start, formatter),
-                    LocalDate.parse(end, formatter)));
+            Task task = new Event(description, LocalDate.parse(start, formatter),
+                    LocalDate.parse(end, formatter));
+            this.tasks.addTask(task);
+
+            this.storage.save(this.tasks);
+            this.ui.printTaskAdded(this.tasks.getTask(this.tasks.size()), this.tasks.size());
+
+            return task;
 
         } catch (DateTimeParseException e) {
             throw new CoveException("OOPS! Invalid date format! Your dates must be in the format of \"yyyy/mm/dd\".");
         }
-
-        this.storage.save(this.tasks);
-        this.ui.printTaskAdded(this.tasks.getTask(this.tasks.size()), this.tasks.size());
     }
 
     /**
@@ -309,7 +372,7 @@ public class Cove {
      * @param arguments Only the arguments part of the userInput string entered into the console.
      * @throws CoveException if a task number is not specified or is invalid, or more than 1 parameter is provided.
      */
-    public void handleDelete(String arguments) throws CoveException {
+    public Task handleDelete(String arguments) throws CoveException {
         if (arguments.isEmpty()) {
             throw new CoveException("OOPS! You didn't specify a task number to delete.");
         }
@@ -329,12 +392,14 @@ public class Cove {
             this.ui.printTaskDeleted(task, this.tasks.size());
             this.storage.save(this.tasks);
 
+            return task;
+
         } catch (NumberFormatException e) {
             throw new CoveException("OOPS! Task index must be a valid integer.");
         }
     }
 
-    public void handleFind(String arguments) throws CoveException {
+    public String handleFind(String arguments) throws CoveException {
         if (arguments.isEmpty()) {
             throw new CoveException("OOPS! You didn't specify a keyword to search for.");
         }
@@ -346,6 +411,14 @@ public class Cove {
         }
 
         this.ui.printTasksWithMatchingKeyword(matchingTasks);
+
+        // For gui
+        StringBuilder sb = new StringBuilder();
+        sb.append(" Here are the matching tasks in your list:");
+        for (Task task : matchingTasks) {
+            sb.append("\n ").append(task.getIndex()).append(".").append(task.toString());
+        }
+        return sb.toString();
     }
 
     /**
