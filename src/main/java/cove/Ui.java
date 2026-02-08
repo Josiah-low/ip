@@ -55,7 +55,11 @@ public class Ui {
 
         System.out.println(" Here are the tasks in your list:");
         for (int i = 1; i <= tasks.size(); i++) {
-            System.out.printf(" %d.%s\n", i, tasks.getTask(i).toString());
+            String taskString = tasks.getTask(i).toString();
+
+            assert taskString != null : "Task string should not be null";
+
+            System.out.printf(" %d.%s\n", i, taskString);
         }
         printLongLine();
         System.out.println();
@@ -75,6 +79,7 @@ public class Ui {
             System.out.println(" Now you have " + numOfTasks + " tasks in the list.");
         }
     }
+
     /**
      * Prints a confirmation message about the most recent task added to the list to the console.
      *
@@ -176,14 +181,21 @@ public class Ui {
     }
 
     public String getByeAsString(String arguments) {
+        assert arguments != null : "Arguments should not be null";
         return " Bye. Hope to see you again soon!";
     }
 
     public String getTaskListAsString(TaskList tasks) {
+        assert tasks != null : "Task list should not be null";
+
         StringBuilder sb = new StringBuilder();
         sb.append(" Here are the tasks in your list:");
         for (int i = 1; i <= tasks.size(); i++) {
-            sb.append("\n ").append(i).append(". ").append(tasks.getTask(i).toString());
+            String taskString = tasks.getTask(i).toString();
+
+            assert taskString != null : "Task string should not be null";
+
+            sb.append("\n ").append(i).append(". ").append(taskString);
         }
         return sb.toString();
     }

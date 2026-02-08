@@ -10,6 +10,8 @@ import java.time.format.DateTimeFormatter;
  */
 public class Event extends Task {
 
+    public static final int DATA_STRING_PARTS = 4;
+
     /** Date on which the task begins */
     private LocalDate start;
     /** Date on which the task ends */
@@ -73,7 +75,7 @@ public class Event extends Task {
 
         assert result != null : "Event data string should not be null";
         assert result.startsWith("E") : "Event data string should start with 'E'";
-        assert result.split("\\|").length == 4 : "Event data string should have 4 parts";
+        assert result.split("\\|").length == Event.DATA_STRING_PARTS : "Event data string should have 4 parts";
 
         return result;
     }

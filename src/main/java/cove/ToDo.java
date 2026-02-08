@@ -7,6 +7,8 @@ package cove;
  */
 public class ToDo extends Task {
 
+    public static final int DATA_STRING_PARTS = 2;
+
     /**
      * Creates a new cove.ToDo task with the specified description.
      *
@@ -43,7 +45,7 @@ public class ToDo extends Task {
 
         assert result != null : "ToDo data string should not be null";
         assert result.startsWith("T") : "ToDo data string should start with 'T'";
-        assert result.split("\\|").length == 2 : "ToDo data string should have 2 parts";
+        assert result.split("\\|").length == ToDo.DATA_STRING_PARTS : "ToDo data string should have 2 parts";
 
         return result;
     }
