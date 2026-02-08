@@ -30,8 +30,15 @@ public class Storage {
      * @param filePath The path of the file to store tasks information.
      */
     public Storage(String filePath) {
+        assert filePath != null : "File path should not be null";
+        assert !filePath.isEmpty() : "File path should not be empty";
+
         this.filePath = filePath;
+        assert this.filePath != null : "File path should be initialised";
+
         File data = new File(filePath);
+        assert data != null : "File object should be created";
+
         try {
             data.createNewFile();
         } catch (IOException e) {
@@ -49,6 +56,9 @@ public class Storage {
      * @throws CoveException if the task type is unrecognised or the data format is invalid.
      */
     private Task loadTask(String dataString) throws CoveException {
+        assert dataString != null : "Data string should not be null";
+        assert !dataString.isEmpty() : "Data string should not be empty";
+
         try {
             switch (dataString.charAt(0)) {
             case 'T': {
@@ -100,13 +110,17 @@ public class Storage {
      */
     public ArrayList<Task> load() {
         ArrayList<Task> tasks = new ArrayList<Task>();
+        assert tasks != null : "Tasks list should be initialised";
 
         try {
             File data = new File("./data/cove.txt");
             Scanner scanner = new Scanner(data);
+            assert scanner != null : "Scanner should be initialised";
 
             while (scanner.hasNext()) {
-                tasks.add(loadTask(scanner.next()));
+                Task loadedTask = loadTask(scanner.next());
+                assert loadedTask != null : "Loaded task should not be null";
+                tasks.add(loadedTask);
             }
             scanner.close();
 
@@ -116,6 +130,7 @@ public class Storage {
             System.out.println(e.getMessage());
         }
 
+        assert tasks != null : "Tasks list should not be null";
         return tasks;
     }
 
@@ -127,7 +142,13 @@ public class Storage {
      * @throws IOException if an I/O error occurs.
      */
     private static void appendToFile(String filePath, String text) throws IOException {
+        assert filePath != null : "File path should not be null";
+        assert !filePath.isEmpty() : "File path should not be empty";
+        assert text != null : "Text should not be null";
+
         FileWriter fileWriter = new FileWriter(filePath, true);
+        assert fileWriter != null : "FileWriter should be initialised";
+
         fileWriter.write(text);
         fileWriter.close();
     }
@@ -140,10 +161,17 @@ public class Storage {
      * @param tasks The task list to save into the data file.
      */
     public void save(TaskList tasks) {
+        assert tasks != null : "Task list should not be null";
+
         try {
             Files.delete(Paths.get("./data/cove.txt"));
             for (Task task : tasks.getTasks()) {
-                appendToFile("./data/cove.txt", task.dataString() + "\n");
+                assert task != null : "Task in list should not be null";
+                String dataString = task.dataString();
+                assert dataString != null : "Task data string should not be null";
+                assert !dataString.isEmpty() : "Task data string should not be empty";
+
+                appendToFile("./data/cove.txt", dataString + "\n");
             }
         } catch (IOException e) {
             System.out.println("Something went wrong: " + e.getMessage());

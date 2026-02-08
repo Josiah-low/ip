@@ -22,9 +22,16 @@ public class Cove {
      * @param filePath The path of the file to store the task data.
      */
     public Cove(String filePath) {
+        assert filePath != null : "File path should not be null";
+        assert !filePath.isEmpty() : "File path should not  be empty";
+
         this.ui = new Ui();
         this.storage = new Storage(filePath);
         this.tasks = new TaskList(this.storage.load());
+
+        assert this.ui != null : "UI should be initialised";
+        assert this.storage != null : "Storage should be initialised";
+        assert this.tasks != null : "TaskList should be initialised";
     }
 
     /**
@@ -103,10 +110,19 @@ public class Cove {
         new Cove("./data/cove.txt").run();
     }
 
+    /**
+     * Executes the command specified by the user input String and returns Cove's
+     * response message as a String.
+     *
+     * @param input The user input String.
+     */
     public String getResponse(String input) {
         try {
             String command = Parser.parseCommand(input);
             String arguments = Parser.parseArguments(input);
+
+            assert command != null : "Command should not be null";
+            assert arguments != null : "Arguments should not be null";
 
             switch (command) {
             case "bye":
@@ -162,6 +178,8 @@ public class Cove {
      * @throws CoveException if the userInput contains anything other than "bye".
      */
     public void handleBye(String arguments) throws CoveException {
+        assert arguments != null : "Arguments should not be null";
+
         if (!arguments.isEmpty()) {
             throw new CoveException("OOPS! 'bye' command does not accept any parameters.");
         }
@@ -177,6 +195,8 @@ public class Cove {
      * @throws CoveException if the userInput contains anything other than "list".
      */
     public void handleList(String arguments) throws CoveException {
+        assert arguments != null : "Arguments should not be null";
+
         if (!arguments.isEmpty()) {
             throw new CoveException("OOPS! 'list' command does not accept any parameters.");
         }
@@ -194,6 +214,8 @@ public class Cove {
      * @throws NumberFormatException if the argument provided is not a valid integer.
      */
     public Task handleMark(String arguments) throws CoveException {
+        assert arguments != null : "Arguments should not be null";
+
         if (arguments.isEmpty()) {
             throw new CoveException("OOPS! You didn't specify a task number to mark.");
         }
@@ -208,8 +230,12 @@ public class Cove {
             if (taskIndex < 1 || taskIndex > this.tasks.size()) {
                 throw new CoveException("OOPS! The task number you provided is invalid.");
             }
+            assert taskIndex >= 1 && taskIndex <= this.tasks.size() : "Task index should be within valid range";
 
             Task task = this.tasks.markTask(taskIndex);
+            assert task != null : "Marked task should not be null";
+            assert task.isDone() : "Task should be marked as done";
+
             this.storage.save(this.tasks);
             this.ui.printTaskMarked(task);
 
@@ -230,6 +256,8 @@ public class Cove {
      * @throws NumberFormatException if the argument provided is not a valid integer.
      */
     public Task handleUnmark(String arguments) throws CoveException {
+        assert arguments != null : "Arguments should not be null";
+
         if (arguments.isEmpty()) {
             throw new CoveException("OOPS! You didn't specify a task number to mark.");
         }
@@ -244,8 +272,12 @@ public class Cove {
             if (taskIndex < 1 || taskIndex > this.tasks.size()) {
                 throw new CoveException("OOPS! The task number you provided is invalid.");
             }
+            assert taskIndex >= 1 && taskIndex <= this.tasks.size() : "Task index should be within valid range";
 
             Task task = this.tasks.unmarkTask(taskIndex);
+            assert task != null : "Marked task should not be null";
+            assert task.isDone() : "Task should be marked as done";
+
             this.storage.save(this.tasks);
             this.ui.printTaskUnmarked(task);
 
@@ -265,6 +297,8 @@ public class Cove {
      * @throws CoveException if the task description is empty.
      */
     public Task handleTodo(String arguments) throws CoveException {
+        assert arguments != null : "Arguments should not be null";
+
         String description = arguments;
 
         if (description.isEmpty()) {
@@ -272,7 +306,12 @@ public class Cove {
         }
 
         Task task = new ToDo(description);
+        assert task != null : "Created task should not be null";
+
+        int taskListSizeBefore = this.tasks.size();
         this.tasks.addTask(task);
+        assert this.tasks.size() == taskListSizeBefore + 1 : "Task list size should increase by 1";
+
         this.storage.save(this.tasks);
         this.ui.printTaskAdded(task, this.tasks.size());
 
@@ -289,6 +328,8 @@ public class Cove {
      * @throws CoveException if the task description or deadline is empty, or no /by separator is used.
      */
     public Task handleDeadline(String arguments) throws CoveException {
+        assert arguments != null : "Arguments should not be null";
+
         if (!arguments.contains("/by")) {
             throw new CoveException("OOPS! Please specify a deadline with /by.");
         }
@@ -306,7 +347,11 @@ public class Cove {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
             Task task = new Deadline(description, LocalDate.parse(by, formatter));
+            assert task != null : "Created task should not be null";
+
+            int taskListSizeBefore = this.tasks.size();
             this.tasks.addTask(task);
+            assert this.tasks.size() == taskListSizeBefore + 1 : "Task list size should increase by 1";
 
             this.storage.save(this.tasks);
             this.ui.printTaskAdded(task, this.tasks.size());
@@ -328,6 +373,8 @@ public class Cove {
      * @throws CoveException if the task description, start, or end is empty, or no /from or /to separator is used.
      */
     public Task handleEvent(String arguments) throws CoveException {
+        assert arguments != null : "Arguments should not be null";
+
         if (!arguments.contains("/from") || !arguments.contains("/to")) {
             throw new CoveException("OOPS! Please specify a start date with '/from' and an end date with '/to'.");
         }
@@ -352,7 +399,11 @@ public class Cove {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
             Task task = new Event(description, LocalDate.parse(start, formatter),
                     LocalDate.parse(end, formatter));
+            assert task != null : "Created task should not be null";
+
+            int taskListSizeBefore = this.tasks.size();
             this.tasks.addTask(task);
+            assert this.tasks.size() == taskListSizeBefore + 1 : "Task list size should increase by 1";
 
             this.storage.save(this.tasks);
             this.ui.printTaskAdded(this.tasks.getTask(this.tasks.size()), this.tasks.size());
@@ -373,6 +424,8 @@ public class Cove {
      * @throws CoveException if a task number is not specified or is invalid, or more than 1 parameter is provided.
      */
     public Task handleDelete(String arguments) throws CoveException {
+        assert arguments != null : "Arguments should not be null";
+
         if (arguments.isEmpty()) {
             throw new CoveException("OOPS! You didn't specify a task number to delete.");
         }
@@ -388,7 +441,11 @@ public class Cove {
                 throw new CoveException("OOPS! The task number you provided is invalid.");
             }
 
+            int taskListSizeBefore = this.tasks.size();
             Task task = this.tasks.deleteTask(taskIndex);
+            assert task != null : "Deleted task should not be null";
+            assert this.tasks.size() == taskListSizeBefore - 1 : "Task list size should decrease by 1";
+
             this.ui.printTaskDeleted(task, this.tasks.size());
             this.storage.save(this.tasks);
 
@@ -400,11 +457,14 @@ public class Cove {
     }
 
     public String handleFind(String arguments) throws CoveException {
+        assert arguments != null : "Arguments should not be null";
+
         if (arguments.isEmpty()) {
             throw new CoveException("OOPS! You didn't specify a keyword to search for.");
         }
 
         ArrayList<Task> matchingTasks = this.tasks.getTasksWithMatchingKeyword(arguments);
+        assert matchingTasks != null : "Matching tasks list should not be null";
 
         if (matchingTasks.isEmpty()) {
             throw new CoveException("OOPS! None of your tasks contains the keyword.");

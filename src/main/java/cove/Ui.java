@@ -13,6 +13,8 @@ public class Ui {
      */
     public Ui() {
         this.scanner = new Scanner(System.in);
+
+        assert this.scanner != null : "Scanner should be initialised";
     }
 
     /**
@@ -49,6 +51,8 @@ public class Ui {
      * @param tasks The user's task list.
      */
     public void printTaskList(TaskList tasks) {
+        assert tasks != null : "Task list should not be null";
+
         System.out.println(" Here are the tasks in your list:");
         for (int i = 1; i <= tasks.size(); i++) {
             System.out.printf(" %d.%s\n", i, tasks.getTask(i).toString());
@@ -63,6 +67,8 @@ public class Ui {
      * @param numOfTasks The total number of tasks in the user's task list.
      */
     public void printNumOfTasks(int numOfTasks) {
+        assert numOfTasks >= 0 : "Number of tasks should not be negative";
+
         if (numOfTasks == 1) {
             System.out.println(" Now you have 1 task in the list.");
         } else {
@@ -76,6 +82,9 @@ public class Ui {
      * @param numOfTasks The total number of tasks in the user's task list.
      */
     public void printTaskAdded(Task task, int numOfTasks) {
+        assert task != null : "Task should not be null";
+        assert numOfTasks >= 1 : "Number of tasks should be at least 1 after adding a task";
+
         System.out.println(" Got it. I've added this task:");
         System.out.println(" " + task.toString());
         printNumOfTasks(numOfTasks);
@@ -90,6 +99,9 @@ public class Ui {
      * @param numOfTasks The total number of tasks in the user's task list.
      */
     public void printTaskDeleted(Task task, int numOfTasks) {
+        assert task != null : "Task should not be null";
+        assert numOfTasks >= 0 : "Number of tasks should not be negative after deleting a task";
+
         System.out.println(" Noted. I've removed this task:");
         System.out.println("   " + task.toString());
         printNumOfTasks(numOfTasks);
@@ -103,6 +115,9 @@ public class Ui {
      * @param task The task to print as marked as done.
      */
     public void printTaskMarked(Task task) {
+        assert task != null : "Task should not be null";
+        assert task.isDone() : "Task should be marked as done";
+
         System.out.println(" Nice! I've marked this task as done:");
         System.out.println(" " + task.toString());
         printLongLine();
@@ -115,6 +130,9 @@ public class Ui {
      * @param task The task to print as marked as not done.
      */
     public void printTaskUnmarked(Task task) {
+        assert task != null : "Task should not be null";
+        assert !task.isDone() : "Task should be marked as not done";
+
         System.out.println(" OK, I've marked this task as not done yet:");
         System.out.println(" " + task.toString());
         printLongLine();
@@ -127,14 +145,25 @@ public class Ui {
      * @return The string containing the user's input to the console.
      */
     public String readUserInput() {
-        return this.scanner.nextLine();
+        assert this.scanner != null : "Scanner should not be null";
+
+        String userInput = this.scanner.nextLine();
+
+        assert userInput != null : "User input should not be null";
+
+        return userInput;
     }
 
-    public void printTasksWithMatchingKeyword(ArrayList<Task> tasks) {
+    public void printTasksWithMatchingKeyword(ArrayList<Task> matchingTasks) {
+        assert matchingTasks != null : "Tasks list should not be null";
+
         System.out.println(" Here are the matching tasks in your list:");
 
-        for (int i = 1; i <= tasks.size(); i++) {
-            Task matchingTask = tasks.get(i - 1);
+        for (int i = 1; i <= matchingTasks.size(); i++) {
+            Task matchingTask = matchingTasks.get(i - 1);
+
+            assert matchingTask != null : "Matching task should not be null";
+
             System.out.println(" " + matchingTask.getIndex() + "." + matchingTask.toString());
         }
 

@@ -21,7 +21,13 @@ public class Deadline extends Task {
      */
     public Deadline(String description, LocalDate by) {
         super(description);
+
+        assert description != null : "Description should not be null";
+        assert !description.isEmpty() : "Description should not be empty";
+        assert by != null : "Deadline date should not be null";
+
         this.by = by;
+        assert this.by != null : "Deadline date should be initialised";
     }
 
     /**
@@ -31,8 +37,16 @@ public class Deadline extends Task {
      */
     @Override
     public String toString() {
+        assert this.by != null : "Deadline date should not be null";
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy");
-        return "[D]" + super.toString() + " (by: " + this.by.format(formatter) + ")";
+        String result = "[D]" + super.toString() + " (by: " + this.by.format(formatter) + ")";
+
+        assert result != null : "String should not be null";
+        assert result.startsWith("[D]") : "Deadline string should start with '[D]'";
+        assert result.contains("by:") : "Deadline string should contain 'by:' indicator";
+
+        return result;
     }
 
     /**
@@ -42,6 +56,14 @@ public class Deadline extends Task {
      */
     @Override
     public String dataString() {
-        return "D" +  super.dataString() + "|" + this.by.toString();
+        assert this.by != null : "Deadline date should not be null";
+
+        String result = "D" +  super.dataString() + "|" + this.by.toString();
+
+        assert result != null : "Deadline data string should not be null";
+        assert result.startsWith("D") : "Deadline data string should start with 'D'";
+        assert result.split("\\|").length == 3 : "Deadline data string should have 3 parts";
+
+        return result;
     }
 }

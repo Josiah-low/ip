@@ -14,6 +14,9 @@ public class ToDo extends Task {
      */
     public ToDo(String description) {
         super(description);
+
+        assert description != null : "Description should not be null";
+        assert !description.isEmpty() : "Description should not be empty";
     }
 
     /**
@@ -23,7 +26,11 @@ public class ToDo extends Task {
      */
     @Override
     public String toString() {
-        return "[T]" + super.toString();
+        String result = "[T]" + super.toString();
+
+        assert result.startsWith("[T]") : "ToDo string should start with '[T]'";
+
+        return result;
     }
 
     /**
@@ -32,6 +39,12 @@ public class ToDo extends Task {
      */
     @Override
     public String dataString() {
-        return "T" + super.dataString();
+        String result = "T" + super.dataString();
+
+        assert result != null : "ToDo data string should not be null";
+        assert result.startsWith("T") : "ToDo data string should start with 'T'";
+        assert result.split("\\|").length == 2 : "ToDo data string should have 2 parts";
+
+        return result;
     }
 }

@@ -23,18 +23,28 @@ public abstract class Task {
      * @param description The description of the task.
      */
     public Task(String description) {
+        assert description != null : "Description should not be null";
+        assert !description.isEmpty() : "Description should not be empty";
+
         this.description = description.trim();
+
+        assert this.description != null : "Description should be initialised";
+        assert !this.description.isEmpty() : "Trimmed description should not be empty";
     }
 
     public String getDescription() {
+        assert this.description != null : "Description should not be null";
+
         return this.description;
     }
 
-    public boolean IsDone() {
+    public boolean isDone() {
         return this.isDone;
     }
 
     public int getIndex() {
+        assert this.index > 0 : "Index should be positive";
+
         return this.index;
     }
 
@@ -43,6 +53,8 @@ public abstract class Task {
     }
 
     public void setIndex(int index) {
+        assert index > 0 : "Index should be positive";
+
         this.index = index;
     }
 
@@ -53,11 +65,21 @@ public abstract class Task {
      */
     @Override
     public String toString() {
+        assert this.description != null : "Description should not be null";
+
+        String result;
         if (this.isDone) {
-            return "[X] " + this.description;
+            result = "[X] " + this.description;
+            assert result.startsWith("[X]") : "Completed task should start with [X]";
         } else {
-            return "[ ] " + this.description;
+            result = "[ ] " + this.description;
+            assert result.startsWith("[ ]") : "Incomplete task should start with [ ]";
         }
+
+        assert result != null : "String should not be null";
+        assert result.contains(this.description) : "Result should contain task description";
+
+        return result;
     }
 
     /**
@@ -65,11 +87,22 @@ public abstract class Task {
      * The format is: "X|description" where X is "1" if true, or "0" if false.
      */
     public String dataString() {
+        assert this.description != null : "Description should not be null";
+
+        String result;
         if (this.isDone) {
-            return "1|" + this.description;
+            result = "1|" + this.description;
+            assert result.startsWith("1|") : "Completed task data should start with 1|";
         } else {
-            return "0|" + this.description;
+            result = "0|" + this.description;
+            assert result.startsWith("0|") : "Incomplete task data should start with 0|";
         }
+
+        assert result != null : "Data string should not be null";
+        assert result.contains("|") : "Data string should contain '|' separator";
+        assert result.split("\\|").length == 2 : "Data string should have 2 parts";
+
+        return result;
     }
 
 }

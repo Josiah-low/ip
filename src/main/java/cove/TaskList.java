@@ -18,7 +18,11 @@ public class TaskList {
      * @param tasks The cove.Task ArrayList to initialise the cove.TaskList with.
      */
     public TaskList(ArrayList<Task> tasks) {
+        assert tasks != null : "Tasks should not be null";
+
         this.tasks = tasks;
+
+        assert this.tasks != null : "Tasks should be initialised";
     }
 
     /**
@@ -26,22 +30,39 @@ public class TaskList {
      */
     public TaskList() {
         this.tasks = new ArrayList<Task>();
+
+        assert this.tasks != null : "Tasks should be initialised";
     }
 
 
     public ArrayList<Task> getTasks() {
+        assert tasks != null : "Tasks should not be null";
+
         return this.tasks;
     }
 
     public Task getTask(int taskIndex) {
-        return this.tasks.get(taskIndex - 1);
+        assert taskIndex > 0 : "Task index should be positive";
+        assert taskIndex <= this.tasks.size() : "Task index should not exceed task list size";
+
+        Task task = this.tasks.get(taskIndex - 1);
+
+        assert task != null : "Task retrieved should not be null";
+
+        return task;
     }
 
     /**
      * Returns the total number of tasks in the task list.
      */
     public int size() {
-        return this.tasks.size();
+        assert this.tasks != null : "Tasks list should not be null";
+
+        int size = this.tasks.size();
+
+        assert size >= 0 : "Size should be non-negative";
+
+        return size;
     }
 
     /**
@@ -50,6 +71,8 @@ public class TaskList {
      * @param task The task to add to the list.
      */
     public void addTask(Task task) {
+        assert task != null : "Task to add should not be null";
+
         this.tasks.add(task);
     }
 
@@ -60,6 +83,9 @@ public class TaskList {
      * to delete from the list.
      */
     public Task deleteTask(int taskIndex) {
+        assert taskIndex > 0 : "Task index should be positive";
+        assert taskIndex <= this.tasks.size() : "Task index should not exceed task list size";
+
         return this.tasks.remove(taskIndex - 1);
     }
 
@@ -70,6 +96,9 @@ public class TaskList {
      * to mark as done from the list.
      */
     public Task markTask(int taskIndex) {
+        assert taskIndex > 0 : "Task index should be positive";
+        assert taskIndex <= this.tasks.size() : "Task index should not exceed task list size";
+
         this.tasks.get(taskIndex - 1).setDone(true);
         return this.tasks.get(taskIndex - 1);
     }
@@ -81,11 +110,17 @@ public class TaskList {
      * to mark as not done from the list.
      */
     public Task unmarkTask(int taskIndex) {
+        assert taskIndex > 0 : "Task index should be positive";
+        assert taskIndex <= this.tasks.size() : "Task index should not exceed task list size";
+
         this.tasks.get(taskIndex - 1).setDone(false);
         return this.tasks.get(taskIndex - 1);
     }
 
     public ArrayList<Task> getTasksWithMatchingKeyword(String description) {
+        assert description != null : "Description should not be null";
+        assert !description.isEmpty() : "Description should not be empty";
+
         ArrayList<Task> matchingTasks = new ArrayList<>();
 
         for (int i = 1; i <= this.tasks.size(); i++) {
