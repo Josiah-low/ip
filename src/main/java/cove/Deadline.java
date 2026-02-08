@@ -10,6 +10,8 @@ import java.time.format.DateTimeFormatter;
  */
 public class Deadline extends Task {
 
+    public static final int DATA_STRING_PARTS = 3;
+
     /** cove.Deadline date by which task should be completed */
     private LocalDate by;
 
@@ -62,7 +64,7 @@ public class Deadline extends Task {
 
         assert result != null : "Deadline data string should not be null";
         assert result.startsWith("D") : "Deadline data string should start with 'D'";
-        assert result.split("\\|").length == 3 : "Deadline data string should have 3 parts";
+        assert result.split("\\|").length == Deadline.DATA_STRING_PARTS : "Deadline data string should have 3 parts";
 
         return result;
     }

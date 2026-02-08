@@ -117,21 +117,25 @@ public class TaskList {
         return this.tasks.get(taskIndex - 1);
     }
 
-    public ArrayList<Task> getTasksWithMatchingKeyword(String description) {
-        assert description != null : "Description should not be null";
-        assert !description.isEmpty() : "Description should not be empty";
+    public ArrayList<Task> getTasksWithMatchingKeyword(String keyword) {
+        assert keyword != null : "Keyword should not be null";
+        assert !keyword.isEmpty() : "Keyword should not be empty";
 
         ArrayList<Task> matchingTasks = new ArrayList<>();
 
         for (int i = 1; i <= this.tasks.size(); i++) {
             Task task = getTask(i);
             task.setIndex(i);
-            if (task.getDescription().toLowerCase().contains(description.toLowerCase())) {
+            if (taskDescriptionContainsKeyword(task, keyword)) {
                 matchingTasks.add(task);
             }
         }
 
         return matchingTasks;
+    }
+
+    public boolean taskDescriptionContainsKeyword(Task task, String keyword) {
+        return task.getDescription().toLowerCase().contains(keyword.toLowerCase());
     }
 
 }

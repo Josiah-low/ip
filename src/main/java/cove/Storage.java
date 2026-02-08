@@ -62,35 +62,13 @@ public class Storage {
         try {
             switch (dataString.charAt(0)) {
             case 'T': {
-                String description = dataString.split("\\|", 2)[1];
-                Task taskToLoad = new ToDo(description);
-                if (dataString.charAt(1) == '1') {
-                    taskToLoad.setDone(true);
-                }
-                return taskToLoad;
+                return loadToDoTask(dataString);
             }
             case 'D': {
-                String[] words = dataString.split("\\|", 3);
-                String description = words[1];
-                String by = words[2];
-
-                Task taskToLoad = new Deadline(description, LocalDate.parse(by));
-                if (dataString.charAt(1) == '1') {
-                    taskToLoad.setDone(true);
-                }
-                return taskToLoad;
+                return loadDeadlineTask(dataString);
             }
             case 'E': {
-                String[] words = dataString.split("\\|", 4);
-                String description = words[1];
-                String start = words[2];
-                String end = words[3];
-
-                Task taskToLoad = new Event(description, LocalDate.parse(start), LocalDate.parse(end));
-                if (dataString.charAt(1) == '1') {
-                    taskToLoad.setDone(true);
-                }
-                return taskToLoad;
+                return loadEventTask(dataString);
             }
             default: {
                 throw new CoveException("Error: Unrecognised task type in save file.");
@@ -99,6 +77,40 @@ public class Storage {
         } catch (DateTimeParseException e) {
             throw new CoveException("Error: Corrupted date in save file.");
         }
+    }
+
+    private Task loadToDoTask(String dataString) {
+        String description = dataString.split("\\|", ToDo.DATA_STRING_PARTS)[1];
+        Task taskToLoad = new ToDo(description);
+        if (dataString.charAt(1) == '1') {
+            taskToLoad.setDone(true);
+        }
+        return taskToLoad;
+    }
+
+    private Task loadDeadlineTask(String dataString) {
+        String[] words = dataString.split("\\|", Deadline.DATA_STRING_PARTS);
+        String description = words[1];
+        String by = words[2];
+
+        Task taskToLoad = new Deadline(description, LocalDate.parse(by));
+        if (dataString.charAt(1) == '1') {
+            taskToLoad.setDone(true);
+        }
+        return taskToLoad;
+    }
+
+    private Task loadEventTask(String dataString) {
+        String[] words = dataString.split("\\|", Event.DATA_STRING_PARTS);
+        String description = words[1];
+        String start = words[2];
+        String end = words[3];
+
+        Task taskToLoad = new Event(description, LocalDate.parse(start), LocalDate.parse(end));
+        if (dataString.charAt(1) == '1') {
+            taskToLoad.setDone(true);
+        }
+        return taskToLoad;
     }
 
     /**
