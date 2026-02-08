@@ -24,8 +24,16 @@ public class Event extends Task {
      */
     public Event(String description, LocalDate start, LocalDate end) {
         super(description);
+
+        assert description != null : "Description should not be null";
+        assert !description.isEmpty() : "Description should not be empty";
+        assert start != null : "Start date should not be null";
+        assert end != null : "End date should not be null";
+
         this.start = start;
         this.end = end;
+        assert this.start != null : "Start date should be initialised";
+        assert this.end != null : "End date should be initialised";
     }
 
     /**
@@ -36,8 +44,19 @@ public class Event extends Task {
      */
     @Override
     public String toString() {
+        assert this.start != null : "Start date should not be null";
+        assert this.end != null : "End date should not be null";
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy");
-        return "[E]" + super.toString() + " (from: " + this.start.format(formatter) + " to: " + this.end.format(formatter) + ")";
+        String result = "[E]" + super.toString() + " (from: " + this.start.format(formatter)
+                + " to: " + this.end.format(formatter) + ")";
+
+        assert result != null : "String should not be null";
+        assert result.startsWith("[E]") : "Event string should start with '[E]'";
+        assert result.contains("from:") : "Event string should contain 'from:' indicator";
+        assert result.contains("to:") : "Event string should contain 'to:' indicator";
+
+        return result;
     }
 
     /**
@@ -47,6 +66,15 @@ public class Event extends Task {
      */
     @Override
     public String dataString() {
-        return "E" +  super.dataString() + "|" + this.start + "|" + this.end.toString();
+        assert this.start != null : "Start date should not be null";
+        assert this.end != null : "End date should not be null";
+
+        String result = "E" +  super.dataString() + "|" + this.start + "|" + this.end.toString();
+
+        assert result != null : "Event data string should not be null";
+        assert result.startsWith("E") : "Event data string should start with 'E'";
+        assert result.split("\\|").length == 4 : "Event data string should have 4 parts";
+
+        return result;
     }
 }

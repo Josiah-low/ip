@@ -12,7 +12,15 @@ public class Parser {
      * @return A string containing only the command part of the full user input string.
      */
     public static String parseCommand(String userInput) {
-        return userInput.split(" ", 2)[0];
+        assert userInput != null : "userInput should not be null";
+        assert !userInput.isEmpty() : "userInput should not be empty";
+
+        String command = userInput.split(" ", 2)[0];
+
+        assert command != null : "Parsed command should not be null";
+        assert !command.isEmpty() : "Parsed command should not be empty";
+
+        return command;
     }
 
     /**
@@ -22,12 +30,26 @@ public class Parser {
      * @return A string containing only the arguments part of the full user input string.
      */
     public static String parseArguments(String userInput) {
+        assert userInput != null : "userInput should not be null";
+        assert !userInput.isEmpty() : "userInput should not be empty";
+
         String[] words = userInput.trim().split(" ", 2);
+
+        assert words != null : "words should not be null";
+        assert words.length > 0 : "words should have at least one element";
+
+        String result;
         if (words.length > 1) {
-            return words[1].trim();
+            result = words[1].trim();
+            assert result != null : "Arguments should not be null when present";
         } else {
-            return "";
+            result = "";
         }
+
+        assert result != null : "Result should not be null";
+
+        return result;
+
     }
 
 }
