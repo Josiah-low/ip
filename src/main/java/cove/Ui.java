@@ -201,11 +201,11 @@ public class Ui {
     }
 
     public String getMarkedTaskAsString(Task task) {
-        return " Nice! I've marked this task as done:\n" + task.toString();
+        return " Nice! I've marked this task as done:\n " + task.toString();
     }
 
     public String getUnmarkedTaskAsString(Task task) {
-        return " OK, I've marked this task as not done yet:\n" + task.toString();
+        return " OK, I've marked this task as not done yet:\n " + task.toString();
     }
 
     public String getNumOfTasksAsString(int numOfTasks) {
@@ -230,6 +230,12 @@ public class Ui {
                 + task.toString()
                 + " \n"
                 + getNumOfTasksAsString(numOfTasks);
+    }
+
+    public String getTaskUpdatedString(Task task) {
+        return " Got it. I've updated this task:"
+                + "\n "
+                + task.toString();
     }
 
 }

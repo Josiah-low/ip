@@ -2,6 +2,7 @@ package cove;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 /**
  * Represents a task with a deadline.
@@ -12,14 +13,16 @@ public class Deadline extends Task {
 
     public static final int DATA_STRING_PARTS = 3;
 
-    /** cove.Deadline date by which task should be completed */
+    /**
+     * cove.Deadline date by which task should be completed
+     */
     private LocalDate by;
 
     /**
      * Creates a new cove.Deadline task with the specified description and deadline date.
      *
      * @param description The description of the task.
-     * @param by The deadline date for completing the task.
+     * @param by          The deadline date for completing the task.
      */
     public Deadline(String description, LocalDate by) {
         super(description);
@@ -30,6 +33,15 @@ public class Deadline extends Task {
 
         this.by = by;
         assert this.by != null : "Deadline date should be initialised";
+    }
+
+    public void setBy(String date) throws CoveException {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+            this.by = LocalDate.parse(date, formatter);
+        } catch (DateTimeParseException e) {
+            throw new CoveException("OOPS! Invalid date format! Your dates must be in the format of \"yyyy/mm/dd\".");
+        }
     }
 
     /**
@@ -60,12 +72,61 @@ public class Deadline extends Task {
     public String dataString() {
         assert this.by != null : "Deadline date should not be null";
 
-        String result = "D" +  super.dataString() + "|" + this.by.toString();
+        String result = "D" + super.dataString() + "|" + this.by.toString();
 
         assert result != null : "Deadline data string should not be null";
         assert result.startsWith("D") : "Deadline data string should start with 'D'";
         assert result.split("\\|").length == Deadline.DATA_STRING_PARTS : "Deadline data string should have 3 parts";
 
         return result;
+    }
+
+    @Override
+    public Task update(String updateArguments) throws CoveException {
+        boolean hasDesc = updateArguments.contains("/desc");
+        boolean hasBy = updateArguments.contains("/by");
+        boolean hasFrom = updateArguments.contains("/from");
+        boolean hasTo = updateArguments.contains("/to");
+
+        if (hasFrom || hasTo) {
+            // Invalid: user specifies invalid field(s)
+            throw new CoveException("OOPS! Deadline tasks can only update /desc or /by.");
+        }
+
+        if (!hasDesc && !hasBy) {
+            // Invalid: user does not specify any valid field
+            throw new CoveException("OOPS! Deadline tasks can only update /desc or /by.");
+        }
+
+        if (hasDesc && hasBy) {
+            // Invalid: user specifies more than 1 valid field
+            throw new CoveException("OOPS! You can update only 1 field at a time.");
+        }
+
+        if (hasDesc) {
+            // Valid: user specifies /desc field
+            String[] words = updateArguments.split("/desc", 2);
+            String updatedDescription = words[1].trim();
+
+            if (updatedDescription.isEmpty()) {
+                // Invalid: user does not provide new description
+                throw new CoveException("OOPS! You didn't provide a new description.");
+            }
+
+            this.setDescription(updatedDescription);
+            return this;
+        } else {
+            // Valid: user specifies /by field
+            String[] words = updateArguments.split("/by", 2);
+            String updatedBy = words[1].trim();
+
+            if (updatedBy.isEmpty()) {
+                // Invalid: user does not provide new deadline
+                throw new CoveException("OOPS! You didn't provide a new deadline.");
+            }
+
+            this.setBy(updatedBy);
+            return this;
+        }
     }
 }

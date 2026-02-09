@@ -134,6 +134,11 @@ public class TaskList {
         return matchingTasks;
     }
 
+    public Task updateTask(int taskIndex, String updateArguments) throws CoveException {
+        Task task = getTask(taskIndex);
+        return task.update(updateArguments);
+    }
+
     public boolean taskDescriptionContainsKeyword(Task task, String keyword) {
         return task.getDescription().toLowerCase().contains(keyword.toLowerCase());
     }

@@ -58,6 +58,10 @@ public abstract class Task {
         this.index = index;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     /**
      * Returns a string representation of a Task for printing to console.
      * The format is: "[isDone] description" where isDone is "X" if true,
@@ -104,5 +108,7 @@ public abstract class Task {
 
         return result;
     }
+
+    public abstract Task update(String updateArguments) throws CoveException;
 
 }
