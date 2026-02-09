@@ -16,7 +16,7 @@ public class CoveException extends Exception {
      * @param message The error message to display in the console.
      */
     public CoveException(String message) {
-      super(" " + message + "\n____________________________________________________________\n");
+      super(" " + message);
       assert message != null : "Error message should not be null";
     }
 }

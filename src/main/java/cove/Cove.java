@@ -160,6 +160,9 @@ public class Cove {
             case "find":
                 return handleFind(arguments);
 
+            case "update":
+                return handleUpdate(arguments);
+
             default:
                 return "OOPS! I don't understand what you mean!";
             }
@@ -476,9 +479,44 @@ public class Cove {
         StringBuilder sb = new StringBuilder();
         sb.append(" Here are the matching tasks in your list:");
         for (Task task : matchingTasks) {
-            sb.append("\n ").append(task.getIndex()).append(".").append(task.toString());
+            sb.append("\n ").append(task.getIndex()).append(". ").append(task.toString());
         }
         return sb.toString();
+    }
+
+    public String handleUpdate(String arguments) throws CoveException {
+        assert arguments != null : "Arguments should not be null";
+
+        String[] words = arguments.split(" ", 2);
+
+        if (words.length < 2) {
+            throw new CoveException("OOPS! Please specify task number and field to update.\n" +
+                    "Examples:\n" +
+                    "  update 3 /desc new description\n" +
+                    "  update 3 /by 2025-03-15\n" +
+                    "  update 2 /from 2025-03-10");
+        }
+
+        try {
+            int taskIndex = Integer.parseInt(words[0]);
+
+            if (taskIndex < 1 || taskIndex > this.tasks.size()) {
+                throw new CoveException("OOPS! The task number you provided is invalid.");
+            }
+
+            String updateArguments = words[1];
+
+            Task task = this.tasks.updateTask(taskIndex, updateArguments);
+
+            this.storage.save(this.tasks);
+
+            return ui.getTaskUpdatedString(task);
+
+        } catch (NumberFormatException e) {
+            throw new CoveException("OOPS! Task index must be a valid integer.");
+        } catch (CoveException e) {
+            throw new CoveException(e.getMessage());
+        }
     }
 
     /**
