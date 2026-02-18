@@ -36,7 +36,7 @@ public class Cove {
 
     /**
      * Executes the command specified by the user input String and returns Cove's
-     * response message as a String.
+     * response message as a String for the GUI.
      *
      * @param input The user input String.
      */
@@ -99,7 +99,7 @@ public class Cove {
 
     /**
      * Handles the bye command to exit the application.
-     * Ensures that the bye command entered has no extra parameters, then prints the exit message to the console.
+     * Ensures that the bye command entered has no extra parameters.
      *
      * @param arguments Only the arguments part of the userInput string entered into the console.
      * @throws CoveException if the userInput contains anything other than "bye".
@@ -114,7 +114,7 @@ public class Cove {
 
     /**
      * Handles the list command to display task list.
-     * Ensures that the list command entered has no extra parameters, then prints the task list to the console.
+     * Ensures that the list command entered has no extra parameters.
      *
      * @param arguments Only the arguments part of the userInput string entered into the console.
      * @throws CoveException if the userInput contains anything other than "list".
@@ -130,7 +130,7 @@ public class Cove {
     /**
      * Handles the mark command to mark a specified task as done.
      * Ensures that the mark command entered has only one parameter (a valid task number),
-     * and marks the specified task as done.
+     * and marks the specified task as done, then returns marked Task.
      *
      * @param arguments Only the arguments part of the userInput string entered into the console.
      * @throws CoveException         if a task number is not specified or is invalid, or more than 1 parameter is provided.
@@ -171,7 +171,7 @@ public class Cove {
     /**
      * Handles the unmark command to mark a specified task as not done.
      * Ensures that the mark command entered has only one parameter (a valid task number),
-     * and marks the specified task as not done.
+     * and marks the specified task as not done, then returns the unmarked task.
      *
      * @param arguments Only the arguments part of the userInput string entered into the console.
      * @throws CoveException         if a task number is not specified or is invalid, or more than 1 parameter is provided.
@@ -212,7 +212,8 @@ public class Cove {
     /**
      * Handles the todo command to create a new cove.ToDo task.
      * Obtains the task description from the user input, ensures that it is not empty,
-     * creates a new cove.ToDo task, adds it to the task list, and saves the updated list.
+     * creates a new ToDo task, adds it to the task list, and saves the updated list,
+     * then returns the created Task.
      *
      * @param arguments Only the arguments part of the userInput string entered into the console.
      * @throws CoveException if the task description is empty.
@@ -242,7 +243,7 @@ public class Cove {
      * Handles the deadline command to create a new cove.Deadline task.
      * Obtains the task description and deadline date from the user input, ensures that they are not empty,
      * ensures the date format entered is valid, then creates a new cove.Deadline task,
-     * adds it to the task list, and saves the updated list.
+     * adds it to the task list, and saves the updated list, then returns the created Task.
      *
      * @param arguments Only the arguments part of the userInput string entered into the console.
      * @throws CoveException if the task description or deadline is empty, or no /by separator is used.
@@ -286,7 +287,8 @@ public class Cove {
      * Handles the event command to create a new cove.Event task.
      * Obtains the task description, start date, and end date from the user input,
      * ensures that they are not empty, ensures the date formats entered are valid,
-     * then creates a new cove.Event task, adds it to the task list, and saves the updated list.
+     * then creates a new cove.Event task, adds it to the task list, and saves the updated list,
+     * then returns the created Task.
      *
      * @param arguments Only the arguments part of the userInput string entered into the console.
      * @throws CoveException if the task description, start, or end is empty, or no /from or /to separator is used.
@@ -336,7 +338,7 @@ public class Cove {
     /**
      * Handles the delete command to remove a specified task from the task list.
      * Ensures that the delete command entered has only one parameter (a valid task number),
-     * and deletes the task from the task list.
+     * and deletes the task from the task list, then returns the deleted Task.
      *
      * @param arguments Only the arguments part of the userInput string entered into the console.
      * @throws CoveException if a task number is not specified or is invalid, or more than 1 parameter is provided.
@@ -373,6 +375,15 @@ public class Cove {
         }
     }
 
+    /**
+     * Handles the find command to search for tasks whose descriptions contain a given keyword.
+     * Ensures that a keyword is provided, retrieves all matching tasks from the task list,
+     * prints them to the console, and returns the result as a formatted string for the GUI.
+     *
+     * @param arguments Only the arguments part of the userInput string, used as the search keyword.
+     * @return A formatted string listing all tasks whose descriptions contain the keyword.
+     * @throws CoveException if no keyword is provided, or if no matching tasks are found.
+     */
     public String handleFind(String arguments) throws CoveException {
         assert arguments != null : "Arguments should not be null";
 
@@ -395,6 +406,27 @@ public class Cove {
         return sb.toString();
     }
 
+    /**
+     * Handles the update command to modify a field of an existing task.
+     * Parses the task index and update arguments from the provided string, validates the task index,
+     * delegates the update to the appropriate task, saves the updated task list, and returns
+     * a confirmation message for the GUI.
+     * <p>
+     * Supported update fields depend on the task type:
+     * <ul>
+     *   <li>{@code /desc} — updates the task description (all task types)</li>
+     *   <li>{@code /by} — updates the deadline date (Deadline tasks only)</li>
+     *   <li>{@code /from} — updates the start date (Event tasks only)</li>
+     *   <li>{@code /to} — updates the end date (Event tasks only)</li>
+     * </ul>
+     *
+     * @param arguments The arguments part of the userInput string, containing the task index
+     *                  and the field to update (e.g., {@code "3 /desc new description"}).
+     * @return A formatted string confirming the updated task for the GUI.
+     * @throws CoveException if the task index is missing or invalid, if the field specifier
+     *                       is missing or incompatible with the task type, or if the new
+     *                       value is empty or improperly formatted.
+     */
     public String handleUpdate(String arguments) throws CoveException {
         assert arguments != null : "Arguments should not be null";
 
