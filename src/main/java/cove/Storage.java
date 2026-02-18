@@ -79,6 +79,13 @@ public class Storage {
         }
     }
 
+    /**
+     * Parses a ToDo data string from the save file and returns the corresponding ToDo task.
+     * Marks the task as done if the completion flag in the data string is '1'.
+     *
+     * @param dataString The data string representing a ToDo task (e.g., {@code "T1|buy groceries"}).
+     * @return A ToDo task reconstructed from the data string.
+     */
     private Task loadToDoTask(String dataString) {
         String description = dataString.split("\\|", ToDo.DATA_STRING_PARTS)[1];
         Task taskToLoad = new ToDo(description);
@@ -88,6 +95,14 @@ public class Storage {
         return taskToLoad;
     }
 
+    /**
+     * Parses a Deadline data string from the save file and returns the corresponding Deadline task.
+     * Marks the task as done if the completion flag in the data string is '1'.
+     *
+     * @param dataString The data string representing a Deadline task
+     *                   (e.g., {@code "D0|submit report|2025-03-15"}).
+     * @return A Deadline task reconstructed from the data string.
+     */
     private Task loadDeadlineTask(String dataString) {
         String[] words = dataString.split("\\|", Deadline.DATA_STRING_PARTS);
         String description = words[1];
@@ -100,6 +115,14 @@ public class Storage {
         return taskToLoad;
     }
 
+    /**
+     * Parses an Event data string from the save file and returns the corresponding Event task.
+     * Marks the task as done if the completion flag in the data string is '1'.
+     *
+     * @param dataString The data string representing an Event task
+     *                   (e.g., {@code "E1|team meeting|2025-03-10|2025-03-11"}).
+     * @return An Event task reconstructed from the data string.
+     */
     private Task loadEventTask(String dataString) {
         String[] words = dataString.split("\\|", Event.DATA_STRING_PARTS);
         String description = words[1];
