@@ -14,7 +14,7 @@ public class Deadline extends Task {
     public static final int DATA_STRING_PARTS = 3;
 
     /**
-     * cove.Deadline date by which task should be completed
+     * Deadline date by which task should be completed
      */
     private LocalDate by;
 
@@ -81,6 +81,19 @@ public class Deadline extends Task {
         return result;
     }
 
+    /**
+     * Updates a single field of this Deadline task based on the provided update arguments.
+     * Only one of {@code /desc} or {@code /by} must be specified. The fields
+     * {@code /from} and {@code /to} are not valid for Deadline tasks.
+     *
+     * @param updateArguments A string containing the field specifier and new value
+     *                        (e.g., {@code "/desc buy groceries"} or {@code "/by 2025/03/15"}).
+     * @return This Deadline task after the update has been applied.
+     * @throws CoveException if {@code /from} or {@code /to} is specified, if no valid field
+     *                       is specified, if more than one field is specified at once,
+     *                       if the new description is empty, or if the new deadline date
+     *                       is empty or not in {@code yyyy/MM/dd} format.
+     */
     @Override
     public Task update(String updateArguments) throws CoveException {
         boolean hasDesc = updateArguments.contains("/desc");
