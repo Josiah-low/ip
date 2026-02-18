@@ -39,6 +39,12 @@ public class Storage {
         File data = new File(filePath);
         assert data != null : "File object should be created";
 
+        // create data directory if it doesn't exist yet
+        File dataDir = data.getParentFile();
+        if (dataDir != null && !dataDir.exists()) {
+            dataDir.mkdirs();
+        }
+
         try {
             data.createNewFile();
         } catch (IOException e) {
