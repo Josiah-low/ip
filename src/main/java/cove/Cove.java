@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 /**
  * Main entry point for Cove chatbot.
- * cove.Cove allows the user to add 3 different types of tasks to a list: cove.ToDo, cove.Deadline, and cove.Event.
+ * Cove allows the user to add 3 different types of tasks to a list: cove.ToDo, cove.Deadline, and cove.Event.
  * Users can mark their tasks as done/not done, delete tasks, and view their task list.
  */
 public class Cove {
@@ -32,82 +32,6 @@ public class Cove {
         assert this.ui != null : "UI should be initialised";
         assert this.storage != null : "Storage should be initialised";
         assert this.tasks != null : "TaskList should be initialised";
-    }
-
-    /**
-     * Runs the Cove program.
-     */
-    public void run() {
-        this.ui.printGreeting();
-
-        // Run main loop
-        while (true) {
-            try {
-                String userInput = this.ui.readUserInput();
-                this.ui.printLongLine();
-                String command = Parser.parseCommand(userInput);
-                String arguments = Parser.parseArguments(userInput);
-
-                switch (command) {
-                case "bye": {
-                    handleBye(arguments);
-                    return;
-                }
-
-                case "list": {
-                    handleList(arguments);
-                    break;
-                }
-
-                case "mark": {
-                    handleMark(arguments);
-                    break;
-                }
-
-                case "unmark": {
-                    handleUnmark(arguments);
-                    break;
-                }
-
-                case "todo": {
-                    handleTodo(arguments);
-                    break;
-                }
-
-                case "deadline": {
-                    handleDeadline(arguments);
-                    break;
-                }
-
-                case "event": {
-                    handleEvent(arguments);
-                    break;
-                }
-
-                case "delete": {
-                    handleDelete(arguments);
-                    break;
-                }
-
-                case "find": {
-                    handleFind(arguments);
-                    break;
-                }
-
-                default: {
-                    handleUnknownCommand();
-                    break;
-                }
-                }
-            } catch (CoveException e) {
-                System.out.println(e.getMessage());
-            }
-
-        }
-    }
-
-    public static void main(String[] args) {
-        new Cove("./data/cove.txt").run();
     }
 
     /**
@@ -186,8 +110,6 @@ public class Cove {
         if (!arguments.isEmpty()) {
             throw new CoveException("OOPS! 'bye' command does not accept any parameters.");
         }
-
-        this.ui.printExit();
     }
 
     /**
@@ -203,8 +125,6 @@ public class Cove {
         if (!arguments.isEmpty()) {
             throw new CoveException("OOPS! 'list' command does not accept any parameters.");
         }
-
-        this.ui.printTaskList(this.tasks);
     }
 
     /**
@@ -240,7 +160,6 @@ public class Cove {
             assert task.isDone() : "Task should be marked as done";
 
             this.storage.save(this.tasks);
-            this.ui.printTaskMarked(task);
 
             return task;
 
@@ -282,7 +201,6 @@ public class Cove {
             assert task.isDone() : "Task should be marked as done";
 
             this.storage.save(this.tasks);
-            this.ui.printTaskUnmarked(task);
 
             return task;
 
@@ -316,7 +234,6 @@ public class Cove {
         assert this.tasks.size() == taskListSizeBefore + 1 : "Task list size should increase by 1";
 
         this.storage.save(this.tasks);
-        this.ui.printTaskAdded(task, this.tasks.size());
 
         return task;
     }
@@ -357,7 +274,6 @@ public class Cove {
             assert this.tasks.size() == taskListSizeBefore + 1 : "Task list size should increase by 1";
 
             this.storage.save(this.tasks);
-            this.ui.printTaskAdded(task, this.tasks.size());
 
             return task;
 
@@ -409,7 +325,6 @@ public class Cove {
             assert this.tasks.size() == taskListSizeBefore + 1 : "Task list size should increase by 1";
 
             this.storage.save(this.tasks);
-            this.ui.printTaskAdded(this.tasks.getTask(this.tasks.size()), this.tasks.size());
 
             return task;
 
@@ -449,7 +364,6 @@ public class Cove {
             assert task != null : "Deleted task should not be null";
             assert this.tasks.size() == taskListSizeBefore - 1 : "Task list size should decrease by 1";
 
-            this.ui.printTaskDeleted(task, this.tasks.size());
             this.storage.save(this.tasks);
 
             return task;
@@ -473,9 +387,6 @@ public class Cove {
             throw new CoveException("OOPS! None of your tasks contains the keyword.");
         }
 
-        this.ui.printTasksWithMatchingKeyword(matchingTasks);
-
-        // For gui
         StringBuilder sb = new StringBuilder();
         sb.append(" Here are the matching tasks in your list:");
         for (Task task : matchingTasks) {
@@ -517,16 +428,6 @@ public class Cove {
         } catch (CoveException e) {
             throw new CoveException(e.getMessage());
         }
-    }
-
-    /**
-     * Handles unrecognised commands.
-     * Throws an exception to inform the user that the command entered is not recognised by cove.Cove.
-     *
-     * @throws CoveException always.
-     */
-    public void handleUnknownCommand() throws CoveException {
-        throw new CoveException("OOPS! I don't understand what you mean!");
     }
 
 }
