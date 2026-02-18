@@ -2,7 +2,7 @@ package cove;
 
 /**
  * Represents a simple task without any time information.
- * A cove.ToDo task is the most basic task type, which only
+ * A ToDo task is the most basic task type, which only
  * includes a description and a completion status.
  */
 public class ToDo extends Task {
@@ -10,7 +10,7 @@ public class ToDo extends Task {
     public static final int DATA_STRING_PARTS = 2;
 
     /**
-     * Creates a new cove.ToDo task with the specified description.
+     * Creates a new ToDo task with the specified description.
      *
      * @param description The description of the task.
      */
@@ -50,6 +50,18 @@ public class ToDo extends Task {
         return result;
     }
 
+    /**
+     * Updates the description of this ToDo task based on the provided update arguments.
+     * Only {@code /desc} may be specified; {@code /by}, {@code /from}, and {@code /to}
+     * are not valid for ToDo tasks.
+     *
+     * @param updateArguments A string containing the field specifier and new value
+     *                        (e.g., {@code "/desc buy groceries"}).
+     * @return This ToDo task after the description has been updated.
+     * @throws CoveException if {@code /desc} is not specified, if any of {@code /by},
+     *                       {@code /from}, or {@code /to} are specified, or if the
+     *                       new description is empty.
+     */
     @Override
     public Task update(String updateArguments) throws CoveException {
         boolean hasDesc = updateArguments.contains("/desc");
