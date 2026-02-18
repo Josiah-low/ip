@@ -1,4 +1,4 @@
-# cove.Cove User Guide
+# Cove User Guide
 
 // Update the title above to match the actual product name
 
