@@ -1,7 +1,7 @@
 package cove;
 
 /**
- * Represents an abstract task in cove.Cove's task system.
+ * Represents an abstract task in Cove's task system.
  * This is the base class for all task types. All tasks have a description
  * and a completion status. Subclasses must implement specific task types.
  */
@@ -14,7 +14,11 @@ public abstract class Task {
      * Completion status of the task
      */
     private boolean isDone;
-
+    /**
+     * Index of the task in the user's TaskList (ONLY used for
+     * the command 'find'. This value may not be correct at any other
+     * point in time than when the user uses the command 'find')
+     */
     private int index;
 
     /**
@@ -109,6 +113,17 @@ public abstract class Task {
         return result;
     }
 
+    /**
+     * Updates a single field of this task based on the provided update arguments.
+     * The accepted field specifiers and their validity depend on the task type.
+     *
+     * @param updateArguments A string containing the field specifier and new value
+     *                        (e.g., {@code "/desc new description"}).
+     * @return This task after the update has been applied.
+     * @throws CoveException if the field specifier is invalid for this task type,
+     *                       no field is specified, more than one field is specified,
+     *                       or the new value is empty.
+     */
     public abstract Task update(String updateArguments) throws CoveException;
 
 }
