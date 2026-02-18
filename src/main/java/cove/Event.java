@@ -103,6 +103,20 @@ public class Event extends Task {
         return result;
     }
 
+    /**
+     * Updates a single field of this Event task based on the provided update arguments.
+     * Exactly one of {@code /desc}, {@code /from}, or {@code /to} must be specified.
+     * The field {@code /by} is not valid for Event tasks.
+     *
+     * @param updateArguments A string containing the field specifier and new value
+     *                        (e.g., {@code "/desc team meeting"}, {@code "/from 2025/03/10"},
+     *                        or {@code "/to 2025/03/15"}).
+     * @return This Event task after the update has been applied.
+     * @throws CoveException if {@code /by} is specified, if no valid field is specified,
+     *                       if more than one field is specified at once, if the new description
+     *                       is empty, or if the new start or end date is empty or not in
+     *                       {@code yyyy/MM/dd} format.
+     */
     @Override
     public Task update(String updateArguments) throws CoveException {
         boolean hasDesc = updateArguments.contains("/desc");
