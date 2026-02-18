@@ -117,6 +117,15 @@ public class TaskList {
         return this.tasks.get(taskIndex - 1);
     }
 
+    /**
+     * Returns a list of tasks whose descriptions contain the given keyword (case-insensitive).
+     * Each matching task has its 1-indexed position in the full task list set via
+     * {@link Task#setIndex(int)} before being added to the result list.
+     *
+     * @param keyword The search keyword to match against task descriptions.
+     * @return An {@code ArrayList} of tasks whose descriptions contain the keyword;
+     *         empty if no matches are found.
+     */
     public ArrayList<Task> getTasksWithMatchingKeyword(String keyword) {
         assert keyword != null : "Keyword should not be null";
         assert !keyword.isEmpty() : "Keyword should not be empty";
@@ -134,12 +143,30 @@ public class TaskList {
         return matchingTasks;
     }
 
+    /**
+     * Updates a single field of the task at the specified index.
+     * Delegates to {@link Task#update(String)} on the task at the given index.
+     *
+     * @param taskIndex      The 1-indexed position of the task to update.
+     * @param updateArguments A string containing the field specifier and new value
+     *                        (e.g., {@code "/desc new description"}).
+     * @return The updated task.
+     * @throws CoveException if the update arguments are invalid for the task type.
+     */
     public Task updateTask(int taskIndex, String updateArguments) throws CoveException {
         Task task = getTask(taskIndex);
         return task.update(updateArguments);
     }
 
-    public boolean taskDescriptionContainsKeyword(Task task, String keyword) {
+    /**
+     * Returns {@code true} if the given task's description contains the keyword,
+     * ignoring case.
+     *
+     * @param task    The task whose description is to be checked.
+     * @param keyword The keyword to search for.
+     * @return {@code true} if the task description contains the keyword, {@code false} otherwise.
+     */
+    private boolean taskDescriptionContainsKeyword(Task task, String keyword) {
         return task.getDescription().toLowerCase().contains(keyword.toLowerCase());
     }
 
