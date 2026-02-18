@@ -7,13 +7,22 @@ import java.util.ArrayList;
 
 /**
  * Main entry point for Cove chatbot.
- * Cove allows the user to add 3 different types of tasks to a list: cove.ToDo, cove.Deadline, and cove.Event.
+ * Cove allows the user to add 3 different types of tasks to a list: ToDo, Deadline, and Event.
  * Users can mark their tasks as done/not done, delete tasks, and view their task list.
  */
 public class Cove {
 
+    /**
+     * Ui object to handle GUI interactions
+     */
     private Ui ui;
+    /**
+     * Storage object to handle reading and saving the user's tasks
+     */
     private Storage storage;
+    /**
+     * TaskList to handle operations regarding the user's tasks
+     */
     private TaskList tasks;
 
     /**
