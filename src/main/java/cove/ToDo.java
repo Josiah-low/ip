@@ -63,6 +63,7 @@ public class ToDo extends Task {
         }
 
         if (hasBy || hasFrom || hasTo) {
+            // Invalid: user specifies invalid field(s)
             throw new CoveException("OOPS! ToDo tasks can only update /desc.");
         }
 
